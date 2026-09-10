@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../domain/generators/question.dart';
 import '../features/card/card_page.dart';
-import '../features/home/home_page.dart';
 import '../features/onboarding/onboarding_page.dart';
 import '../features/practice/practice_controller.dart';
 import '../features/practice/practice_page.dart';
@@ -30,6 +29,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final onboarding = state.uri.path == '/onboarding';
       if (!hasProfile && !onboarding) return '/onboarding';
       if (hasProfile && onboarding) return '/';
+      if (state.uri.path == '/tree') return '/';
       return null;
     },
     routes: [
@@ -44,12 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         branches: [
           StatefulShellBranch(
             routes: [
-              GoRoute(path: '/', builder: (context, state) => const HomePage()),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(path: '/tree', builder: (context, state) => const TreePage()),
+              GoRoute(path: '/', builder: (context, state) => const TreePage()),
             ],
           ),
           StatefulShellBranch(

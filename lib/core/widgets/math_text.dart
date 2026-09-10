@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_math_fork/flutter_math.dart';
 
+import '../theme/app_theme.dart';
+
+/// Mixed Chinese + TeX. Inline `$a \mid b$`, display `$$a \equiv b \pmod m$$`.
+/// Engine is KaTeX-compatible (flutter_math_fork), not full LaTeX.
 class MathText extends StatelessWidget {
   const MathText(
     this.text, {
@@ -15,47 +19,51 @@ class MathText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final base =
-        (style ?? Theme.of(context).textTheme.bodyLarge)?.copyWith(color: color);
-    final parts = _split(text);
+    final base = (style ?? AppType.body).copyWith(color: color ?? style?.color);
+    final parts = splitMath(text);
     return Wrap(
       crossAxisAlignment: WrapCrossAlignment.center,
       spacing: 2,
-      runSpacing: 6,
+      runSpacing: 8,
       children: [
         for (final part in parts)
-          if (part.$1)
+          if (part.math)
             Math.tex(
-              part.$2,
-              mathStyle: MathStyle.text,
+              part.tex,
+              mathStyle: part.display ? MathStyle.display : MathStyle.text,
               textStyle: base,
               onErrorFallback: (_) => Text(
-                part.$2,
-                style: base?.copyWith(fontStyle: FontStyle.italic),
+                part.tex,
+                style: base.copyWith(fontStyle: FontStyle.italic),
               ),
             )
           else
-            Text(part.$2, style: base),
+            Text(part.tex, style: base),
       ],
     );
   }
 
-  static List<(bool, String)> _split(String raw) {
-    final out = <(bool, String)>[];
-    final re = RegExp(r'\$([^\$]+)\$');
+  static List<({bool math, bool display, String tex})> splitMath(String raw) {
+    final out = <({bool math, bool display, String tex})>[];
+    final re = RegExp(r'\$\$([\s\S]+?)\$\$|\$([^\$]+)\$');
     var cursor = 0;
     for (final match in re.allMatches(raw)) {
       if (match.start > cursor) {
-        out.add((false, raw.substring(cursor, match.start)));
+        out.add((math: false, display: false, tex: raw.substring(cursor, match.start)));
       }
-      out.add((true, match.group(1)!));
+      final display = match.group(1);
+      if (display != null) {
+        out.add((math: true, display: true, tex: display.trim()));
+      } else {
+        out.add((math: true, display: false, tex: match.group(2)!));
+      }
       cursor = match.end;
     }
     if (cursor < raw.length) {
-      out.add((false, raw.substring(cursor)));
+      out.add((math: false, display: false, tex: raw.substring(cursor)));
     }
     if (out.isEmpty) {
-      out.add((false, raw));
+      out.add((math: false, display: false, tex: raw));
     }
     return out;
   }
