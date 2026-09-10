@@ -2,8 +2,9 @@ import 'models.dart';
 
 const kRootNodeId = 'divisibility_def';
 
-/// Canonical 20-node number-theory tree. L1–L3 are practice-ready.
+/// First subject tree: number theory. L1–L3 are practice-ready.
 final knowledgeGraph = KnowledgeGraph(
+  area: KnowledgeArea.numberTheory,
   rootId: kRootNodeId,
   nodes: const [
     KnowledgeNode(

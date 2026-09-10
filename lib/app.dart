@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/branding.dart';
 import 'core/router.dart';
 import 'core/theme/app_theme.dart';
 import 'providers.dart';
@@ -14,7 +15,7 @@ class MatholymApp extends ConsumerWidget {
     final seeds = ref.watch(seedStoreProvider);
     if (profile.hasError || seeds.hasError) {
       return MaterialApp(
-        title: '数论之树',
+        title: Brand.appName,
         debugShowCheckedModeBanner: false,
         theme: buildAppTheme(),
         home: Scaffold(
@@ -32,7 +33,7 @@ class MatholymApp extends ConsumerWidget {
     }
     if (profile.isLoading || seeds.isLoading) {
       return MaterialApp(
-        title: '数论之树',
+        title: Brand.appName,
         debugShowCheckedModeBanner: false,
         theme: buildAppTheme(),
         home: const Scaffold(
@@ -42,7 +43,7 @@ class MatholymApp extends ConsumerWidget {
     }
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
-      title: '数论之树',
+      title: Brand.appName,
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
       routerConfig: router,

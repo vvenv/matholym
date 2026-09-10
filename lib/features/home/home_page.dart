@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/branding.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/info_tip.dart';
 import '../../core/widgets/status_badge.dart';
@@ -20,7 +21,7 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('数论之树'),
+        title: const Text(Brand.appName),
         actions: [
           IconButton(
             tooltip: '重置进度',
@@ -51,7 +52,23 @@ class HomePage extends ConsumerWidget {
                     style: const TextStyle(color: AppColors.muted),
                   ),
                   const SizedBox(width: 4),
-                  const InfoTip('进度保存在本机，无需登录。'),
+                  const InfoTip('进度保存在本机，无需登录。第一期只开放数论，其他知识面会陆续种上。'),
+                ],
+              ),
+              const SizedBox(height: 14),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  for (final area in KnowledgeArea.planned)
+                    FilterChip(
+                      label: Text(area.title),
+                      selected: area.available &&
+                          (view?.graph.area.id ?? KnowledgeArea.numberTheoryId) ==
+                              area.id,
+                      onSelected: area.available ? (_) {} : null,
+                      tooltip: area.available ? area.blurb : '即将开放',
+                    ),
                 ],
               ),
               const SizedBox(height: 20),
