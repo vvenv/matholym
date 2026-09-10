@@ -1,86 +1,259 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppColors {
-  static const bg = Color(0xFF0B0F14);
-  static const surface = Color(0xFF141A22);
-  static const surface2 = Color(0xFF1C2430);
-  static const border = Color(0xFF2A3441);
-  static const text = Color(0xFFE6EDF5);
-  static const muted = Color(0xFF8B98A8);
-  static const accent = Color(0xFF3DDC97);
-  static const info = Color(0xFF6CB6FF);
-  static const warn = Color(0xFFE8C45D);
-  static const danger = Color(0xFFE85D5D);
-  static const locked = Color(0xFF5A6573);
+  static const bg = Color(0xFF0C0C0B);
+  static const surface = Color(0xFF161614);
+  static const line = Color(0xFF2C2B26);
+  static const text = Color(0xFFE8E6DE);
+  static const muted = Color(0xFF7E7B72);
+  static const accent = Color(0xFFC9A46C);
+  static const ink = Color(0xFF14140F);
+  static const locked = Color(0xFF4A4943);
+  static const mastered = Color(0xFF6E8B74);
+  static const danger = Color(0xFFC46B5A);
+
+  static const info = accent;
+  static const warn = accent;
+  static const border = line;
+  static const surface2 = Color(0xFF1C1C18);
+}
+
+class AppSpace {
+  static const xs = 8.0;
+  static const sm = 12.0;
+  static const md = 20.0;
+  static const lg = 32.0;
+  static const xl = 48.0;
+  static const page = 28.0;
+}
+
+class AppType {
+  static const mark = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.8,
+    height: 1.2,
+    color: AppColors.muted,
+  );
+
+  static const display = TextStyle(
+    fontSize: 34,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 2.5,
+    height: 1.25,
+    color: AppColors.text,
+  );
+
+  static const title = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.2,
+    height: 1.35,
+    color: AppColors.text,
+  );
+
+  static const body = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.75,
+    color: AppColors.text,
+  );
+
+  static const meta = TextStyle(
+    fontSize: 13,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.6,
+    height: 1.3,
+    color: AppColors.muted,
+  );
+
+  static const tabular = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.2,
+    fontFeatures: [FontFeature.tabularFigures()],
+    color: AppColors.muted,
+  );
+}
+
+class QuietProgress extends StatelessWidget {
+  const QuietProgress({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: SizedBox(
+        width: 96,
+        child: LinearProgressIndicator(minHeight: 1),
+      ),
+    );
+  }
+}
+
+class PageColumn extends StatelessWidget {
+  const PageColumn({
+    super.key,
+    required this.children,
+    this.maxWidth = 520,
+    this.padding = const EdgeInsets.fromLTRB(AppSpace.page, AppSpace.md, AppSpace.page, 40),
+  });
+
+  final List<Widget> children;
+  final double maxWidth;
+  final EdgeInsets padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: maxWidth),
+        child: ListView(
+          padding: padding,
+          children: children,
+        ),
+      ),
+    );
+  }
 }
 
 ThemeData buildAppTheme() {
   const scheme = ColorScheme.dark(
     surface: AppColors.surface,
-    primary: AppColors.info,
+    primary: AppColors.accent,
     secondary: AppColors.accent,
     error: AppColors.danger,
     onSurface: AppColors.text,
-    onPrimary: Color(0xFF061018),
+    onPrimary: AppColors.ink,
+    outline: AppColors.line,
   );
   return ThemeData(
     useMaterial3: true,
     brightness: Brightness.dark,
     colorScheme: scheme,
     scaffoldBackgroundColor: AppColors.bg,
+    splashFactory: InkRipple.splashFactory,
+    dividerColor: AppColors.line,
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.bg,
       foregroundColor: AppColors.text,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
       centerTitle: false,
+      titleSpacing: AppSpace.page,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       titleTextStyle: TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+        letterSpacing: 0.8,
         color: AppColors.text,
       ),
+      iconTheme: IconThemeData(color: AppColors.muted, size: 20),
     ),
     cardTheme: CardThemeData(
       color: AppColors.surface,
       elevation: 0,
+      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: const BorderSide(color: AppColors.border),
+        borderRadius: BorderRadius.circular(2),
+        side: const BorderSide(color: AppColors.line),
       ),
     ),
+    dividerTheme: const DividerThemeData(
+      color: AppColors.line,
+      thickness: 1,
+      space: 1,
+    ),
     inputDecorationTheme: InputDecorationTheme(
-      filled: true,
-      fillColor: AppColors.surface2,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.border),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.border),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: AppColors.info),
-      ),
+      filled: false,
+      isDense: true,
+      labelStyle: AppType.meta,
+      hintStyle: AppType.meta,
+      border: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.line)),
+      enabledBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.line)),
+      focusedBorder: const UnderlineInputBorder(borderSide: BorderSide(color: AppColors.accent)),
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        backgroundColor: AppColors.info,
-        foregroundColor: const Color(0xFF061018),
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        backgroundColor: AppColors.accent,
+        foregroundColor: AppColors.ink,
+        elevation: 0,
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        textStyle: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 1,
+        ),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.text,
-        side: const BorderSide(color: AppColors.border),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        side: const BorderSide(color: AppColors.line),
+        padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+        textStyle: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+          letterSpacing: 1,
+        ),
       ),
     ),
-    navigationBarTheme: const NavigationBarThemeData(
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.muted,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        textStyle: const TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+          letterSpacing: 0.6,
+        ),
+      ),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: AppColors.bg,
+      elevation: 0,
+      height: 64,
+      surfaceTintColor: Colors.transparent,
+      indicatorColor: Colors.transparent,
+      overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return TextStyle(
+          fontSize: 11,
+          letterSpacing: 0.8,
+          fontWeight: selected ? FontWeight.w500 : FontWeight.w400,
+          color: selected ? AppColors.text : AppColors.muted,
+        );
+      }),
+      iconTheme: WidgetStateProperty.resolveWith((states) {
+        final selected = states.contains(WidgetState.selected);
+        return IconThemeData(
+          size: 20,
+          color: selected ? AppColors.accent : AppColors.muted,
+        );
+      }),
+    ),
+    dialogTheme: const DialogThemeData(
       backgroundColor: AppColors.surface,
-      indicatorColor: Color(0x332A6FDB),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+        side: BorderSide(color: AppColors.line),
+      ),
+    ),
+    expansionTileTheme: const ExpansionTileThemeData(
+      iconColor: AppColors.muted,
+      collapsedIconColor: AppColors.muted,
+      tilePadding: EdgeInsets.zero,
+      childrenPadding: EdgeInsets.only(bottom: AppSpace.md),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.accent,
+      linearTrackColor: AppColors.line,
     ),
   );
 }

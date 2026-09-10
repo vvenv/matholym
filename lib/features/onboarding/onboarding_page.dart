@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/branding.dart';
 import '../../core/theme/app_theme.dart';
-import '../../core/widgets/info_tip.dart';
 import '../../domain/knowledge/models.dart';
 import '../../providers.dart';
 
@@ -17,7 +16,6 @@ class OnboardingPage extends ConsumerStatefulWidget {
 
 class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   final _name = TextEditingController();
-  StudentStage _stage = StudentStage.junior;
   bool _busy = false;
   String? _error;
 
@@ -28,23 +26,19 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   }
 
   Future<void> _submit() async {
-    final nickname = _name.text.trim();
-    if (nickname.isEmpty) {
-      setState(() => _error = '请填写昵称');
-      return;
-    }
     setState(() {
       _busy = true;
       _error = null;
     });
     try {
+      final nickname = _name.text.trim().isEmpty ? '同学' : _name.text.trim();
       final repo = await ref.read(repositoryProvider.future);
-      await repo.createProfile(nickname: nickname, stage: _stage);
+      await repo.createProfile(nickname: nickname, stage: StudentStage.junior);
       ref.invalidate(profileProvider);
       ref.invalidate(graphViewProvider);
       if (mounted) context.go('/');
     } catch (e) {
-      setState(() => _error = '创建档案失败：$e');
+      setState(() => _error = '$e');
     } finally {
       if (mounted) setState(() => _busy = false);
     }
@@ -56,68 +50,46 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 440),
+            constraints: const BoxConstraints(maxWidth: 400),
             child: Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpace.page),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Spacer(),
-                  Row(
-                    children: [
-                      const Text(
-                        Brand.appName,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      const SizedBox(width: 6),
-                      const InfoTip('本机档案，无需网络。这一期先种数论，从整除定义往上长。'),
-                    ],
+                  const Spacer(flex: 3),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: ColoredBox(
+                      color: AppColors.accent,
+                      child: SizedBox(width: 28, height: 1.5),
+                    ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: AppSpace.md),
+                  const Text(Brand.appName, style: AppType.display),
+                  const SizedBox(height: AppSpace.sm),
+                  Text(
+                    KnowledgeArea.planned.map((a) => a.title).join('  ·  '),
+                    style: AppType.mark,
+                  ),
+                  const SizedBox(height: AppSpace.xl),
                   TextField(
                     controller: _name,
                     textInputAction: TextInputAction.done,
-                    decoration: const InputDecoration(
-                      labelText: '昵称',
-                      hintText: '你希望怎么称呼',
-                    ),
+                    style: AppType.body,
+                    cursorColor: AppColors.accent,
+                    decoration: const InputDecoration(labelText: '昵称'),
                     onSubmitted: (_) => _submit(),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('学段', style: TextStyle(color: AppColors.muted)),
-                  const SizedBox(height: 8),
-                  SegmentedButton<StudentStage>(
-                    segments: [
-                      for (final stage in StudentStage.values)
-                        ButtonSegment(value: stage, label: Text(stage.label)),
-                    ],
-                    selected: {_stage},
-                    onSelectionChanged: (s) => setState(() => _stage = s.first),
-                  ),
                   if (_error != null) ...[
-                    const SizedBox(height: 16),
-                    Text(_error!, style: const TextStyle(color: AppColors.danger)),
+                    const SizedBox(height: AppSpace.sm),
+                    Text(_error!, style: const TextStyle(color: AppColors.danger, height: 1.5)),
                   ],
-                  const SizedBox(height: 28),
+                  const SizedBox(height: AppSpace.lg),
                   FilledButton(
                     onPressed: _busy ? null : _submit,
-                    child: Text(_busy ? '创建中…' : '开始训练'),
+                    child: Text(_busy ? '…' : '开始'),
                   ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: _busy
-                        ? null
-                        : () {
-                            _name.text = '同学';
-                            _submit();
-                          },
-                    child: const Text('用「同学」快速开始'),
-                  ),
-                  const Spacer(),
+                  const Spacer(flex: 4),
                 ],
               ),
             ),

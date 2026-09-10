@@ -36,9 +36,7 @@ class MatholymApp extends ConsumerWidget {
         title: Brand.appName,
         debugShowCheckedModeBanner: false,
         theme: buildAppTheme(),
-        home: const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
+        home: const Scaffold(body: QuietProgress()),
       );
     }
     final router = ref.watch(routerProvider);
