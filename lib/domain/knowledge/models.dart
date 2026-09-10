@@ -1,3 +1,7 @@
+import 'area.dart';
+
+export 'area.dart';
+
 enum KnowledgeLevel {
   l1,
   l2,
@@ -98,8 +102,10 @@ class KnowledgeGraph {
   const KnowledgeGraph({
     required this.rootId,
     required this.nodes,
+    this.area = KnowledgeArea.numberTheory,
   });
 
+  final KnowledgeArea area;
   final String rootId;
   final List<KnowledgeNode> nodes;
 
@@ -113,6 +119,7 @@ class KnowledgeGraph {
 
   factory KnowledgeGraph.fromJson(Map<String, dynamic> json) {
     return KnowledgeGraph(
+      area: KnowledgeArea.byId(json['areaId'] as String? ?? KnowledgeArea.numberTheoryId),
       rootId: json['rootId'] as String,
       nodes: (json['nodes'] as List<dynamic>)
           .map((e) => KnowledgeNode.fromJson(e as Map<String, dynamic>))

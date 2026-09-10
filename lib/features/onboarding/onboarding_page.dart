@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/branding.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/widgets/info_tip.dart';
 import '../../domain/knowledge/models.dart';
@@ -65,7 +66,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   Row(
                     children: [
                       const Text(
-                        '数论之树',
+                        Brand.appName,
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
@@ -73,7 +74,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                         ),
                       ),
                       const SizedBox(width: 6),
-                      const InfoTip('本机档案，无需网络。先选学段，再从整除定义开始往上长。'),
+                      const InfoTip('本机档案，无需网络。这一期先种数论，从整除定义往上长。'),
                     ],
                   ),
                   const SizedBox(height: 32),

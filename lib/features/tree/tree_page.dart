@@ -18,7 +18,9 @@ class TreePage extends ConsumerWidget {
     final graph = ref.watch(graphViewProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('数论之树'),
+        title: Text(
+          graph.valueOrNull?.graph.area.treeTitle ?? KnowledgeArea.numberTheory.treeTitle,
+        ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 8),

@@ -1,11 +1,11 @@
 {
-    "name": "数论之树",
-    "short_name": "数论之树",
+    "name": "奥数之林",
+    "short_name": "奥数之林",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0B0F14",
     "theme_color": "#0B0F14",
-    "description": "数论奥赛专项训练",
+    "description": "竞赛数学知识林：数论、代数、组合、几何。",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

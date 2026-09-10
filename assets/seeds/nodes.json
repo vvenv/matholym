@@ -1,4 +1,5 @@
 {
+  "areaId": "number_theory",
   "rootId": "divisibility_def",
   "nodes": [
     {"id": "divisibility_def", "title": "整除定义", "subtitle": "a|b 与因数", "level": "L1", "prerequisites": [], "practiceReady": true},
