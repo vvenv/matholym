@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../core/widgets/math_text.dart';
 import '../../domain/generators/question.dart';
 import '../../domain/wrong_book.dart';
@@ -152,8 +153,6 @@ class _QuestionView extends ConsumerWidget {
         ],
         if (session.phase == PracticePhase.wrong ||
             session.phase == PracticePhase.solution) ...[
-          const _Banner(color: AppColors.danger, text: '这题还没过。先看提示，再决定要不要打开解析。'),
-          const SizedBox(height: 12),
           for (var i = 0; i < session.hintsShown && i < q.hints.length; i++)
             _HintCard(index: i + 1, text: q.hints[i]),
           const SizedBox(height: 8),
@@ -196,7 +195,17 @@ class _QuestionView extends ConsumerWidget {
         ],
         if (session.phase != PracticePhase.answering && !session.lastCorrect) ...[
           const SizedBox(height: 20),
-          const Text('错因', style: TextStyle(color: AppColors.muted)),
+          Row(
+            children: [
+              const Text('错因', style: TextStyle(color: AppColors.muted)),
+              if (session.lastAttribution != null) ...[
+                const SizedBox(width: 4),
+                InfoTip(
+                  '薄弱点：${graph?.graph.nodeById(session.lastAttribution!.attributedNodeId).title ?? session.lastAttribution!.attributedNodeId}',
+                ),
+              ],
+            ],
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
@@ -210,13 +219,6 @@ class _QuestionView extends ConsumerWidget {
                 ),
             ],
           ),
-          if (session.lastAttribution != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              '薄弱点归因：${graph?.graph.nodeById(session.lastAttribution!.attributedNodeId).title ?? session.lastAttribution!.attributedNodeId}',
-              style: const TextStyle(color: AppColors.info, fontSize: 13),
-            ),
-          ],
           const SizedBox(height: 16),
           FilledButton(
             onPressed: () => ref.read(practiceProvider.notifier).nextAfterWrong(),

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../domain/knowledge/models.dart';
 import '../../domain/mastery.dart';
 import '../../providers.dart';
@@ -16,7 +17,15 @@ class TreePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final graph = ref.watch(graphViewProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('数论之树')),
+      appBar: AppBar(
+        title: const Text('数论之树'),
+        actions: const [
+          Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: InfoTip('完成闯关（正确率 ≥ 80%）后解锁后继节点。锁定节点需先掌握前置。'),
+          ),
+        ],
+      ),
       body: graph.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('$e')),
@@ -34,42 +43,29 @@ class _TreeCanvas extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = TreeLayout.sizeOf(view.graph);
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
-          child: Text(
-            '完成闯关（正确率 ≥ 80%）后解锁后继节点。锁定节点需先掌握前置。',
-            style: TextStyle(color: AppColors.muted, fontSize: 13),
-          ),
-        ),
-        Expanded(
-          child: InteractiveViewer(
-            constrained: false,
-            boundaryMargin: const EdgeInsets.all(80),
-            minScale: 0.55,
-            maxScale: 2.4,
-            child: SizedBox(
-              width: max(size.width, MediaQuery.sizeOf(context).width),
-              height: size.height + 24,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CustomPaint(painter: _EdgePainter(view)),
-                  ),
-                  for (final node in view.graph.nodes)
-                    _NodeCard(
-                      node: node,
-                      status: view.statusOf(node.id),
-                      offset: TreeLayout.topLeft(view.graph, node.id),
-                      onTap: () => _onTap(context, view, node),
-                    ),
-                ],
-              ),
+    return InteractiveViewer(
+      constrained: false,
+      boundaryMargin: const EdgeInsets.all(80),
+      minScale: 0.55,
+      maxScale: 2.4,
+      child: SizedBox(
+        width: max(size.width, MediaQuery.sizeOf(context).width),
+        height: size.height + 24,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: CustomPaint(painter: _EdgePainter(view)),
             ),
-          ),
+            for (final node in view.graph.nodes)
+              _NodeCard(
+                node: node,
+                status: view.statusOf(node.id),
+                offset: TreeLayout.topLeft(view.graph, node.id),
+                onTap: () => _onTap(context, view, node),
+              ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
@@ -177,52 +173,50 @@ class _NodeCard extends StatelessWidget {
       top: offset.dy,
       width: TreeLayout.nodeW,
       height: TreeLayout.nodeH,
-      child: Material(
-        color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: color.withValues(alpha: 0.7)),
-        ),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      node.level.shortLabel,
-                      style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w700),
-                    ),
-                    const Spacer(),
-                    if (status == NodeStatus.locked)
-                      const Icon(Icons.lock_outline, size: 14, color: AppColors.locked)
-                    else if (status == NodeStatus.mastered)
-                      const Icon(Icons.check_circle, size: 14, color: AppColors.accent)
-                    else
-                      const Icon(Icons.auto_stories, size: 14, color: AppColors.info),
-                  ],
-                ),
-                const Spacer(),
-                Text(
-                  node.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: status == NodeStatus.locked ? AppColors.muted : AppColors.text,
+      child: Tooltip(
+        message: node.subtitle.isEmpty ? node.title : '${node.title} · ${node.subtitle}',
+        waitDuration: const Duration(milliseconds: 250),
+        child: Material(
+          color: AppColors.surface,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: color.withValues(alpha: 0.7)),
+          ),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        node.level.shortLabel,
+                        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w700),
+                      ),
+                      const Spacer(),
+                      if (status == NodeStatus.locked)
+                        const Icon(Icons.lock_outline, size: 14, color: AppColors.locked)
+                      else if (status == NodeStatus.mastered)
+                        const Icon(Icons.check_circle, size: 14, color: AppColors.accent)
+                      else
+                        const Icon(Icons.auto_stories, size: 14, color: AppColors.info),
+                    ],
                   ),
-                ),
-                Text(
-                  node.subtitle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(color: AppColors.muted, fontSize: 11),
-                ),
-              ],
+                  const Spacer(),
+                  Text(
+                    node.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: status == NodeStatus.locked ? AppColors.muted : AppColors.text,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

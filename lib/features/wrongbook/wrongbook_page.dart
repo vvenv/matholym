@@ -3,10 +3,27 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../core/widgets/math_text.dart';
 import '../../data/repositories/app_repository.dart';
+import '../../domain/mastery.dart';
 import '../../domain/wrong_book.dart';
 import '../../providers.dart';
+
+String _filterTitle(({String? nodeId, ErrorCause? cause}) filter, GraphView? graph) {
+  final parts = <String>[];
+  if (filter.nodeId != null) {
+    try {
+      parts.add(graph?.graph.nodeById(filter.nodeId!).title ?? filter.nodeId!);
+    } catch (_) {
+      parts.add(filter.nodeId!);
+    }
+  }
+  if (filter.cause != null) {
+    parts.add(filter.cause!.label);
+  }
+  return parts.isEmpty ? '筛选' : '筛选 · ${parts.join(' · ')}';
+}
 
 final _wrongFilterProvider = StateProvider<({String? nodeId, ErrorCause? cause})>(
   (ref) => (nodeId: null, cause: null),
@@ -48,51 +65,63 @@ class WrongBookPage extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
+          Theme(
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+            child: ExpansionTile(
+              title: Text(_filterTitle(filter, graph)),
               children: [
-                FilterChip(
-                  label: const Text('全部节点'),
-                  selected: filter.nodeId == null,
-                  onSelected: (_) => ref.read(_wrongFilterProvider.notifier).state =
-                      (nodeId: null, cause: filter.cause),
-                ),
-                const SizedBox(width: 8),
-                for (final node in nodes) ...[
-                  FilterChip(
-                    label: Text(node.title),
-                    selected: filter.nodeId == node.id,
-                    onSelected: (_) => ref.read(_wrongFilterProvider.notifier).state =
-                        (nodeId: node.id, cause: filter.cause),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: Row(
+                    children: [
+                      FilterChip(
+                        label: const Text('全部节点'),
+                        selected: filter.nodeId == null,
+                        onSelected: (_) =>
+                            ref.read(_wrongFilterProvider.notifier).state =
+                                (nodeId: null, cause: filter.cause),
+                      ),
+                      const SizedBox(width: 8),
+                      for (final node in nodes) ...[
+                        FilterChip(
+                          label: Text(node.title),
+                          selected: filter.nodeId == node.id,
+                          onSelected: (_) =>
+                              ref.read(_wrongFilterProvider.notifier).state =
+                                  (nodeId: node.id, cause: filter.cause),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                ],
-              ],
-            ),
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-            child: Row(
-              children: [
-                FilterChip(
-                  label: const Text('全部错因'),
-                  selected: filter.cause == null,
-                  onSelected: (_) => ref.read(_wrongFilterProvider.notifier).state =
-                      (nodeId: filter.nodeId, cause: null),
                 ),
-                const SizedBox(width: 8),
-                for (final cause in ErrorCause.values) ...[
-                  FilterChip(
-                    label: Text(cause.label),
-                    selected: filter.cause == cause,
-                    onSelected: (_) => ref.read(_wrongFilterProvider.notifier).state =
-                        (nodeId: filter.nodeId, cause: cause),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  child: Row(
+                    children: [
+                      FilterChip(
+                        label: const Text('全部错因'),
+                        selected: filter.cause == null,
+                        onSelected: (_) =>
+                            ref.read(_wrongFilterProvider.notifier).state =
+                                (nodeId: filter.nodeId, cause: null),
+                      ),
+                      const SizedBox(width: 8),
+                      for (final cause in ErrorCause.values) ...[
+                        FilterChip(
+                          label: Text(cause.label),
+                          selected: filter.cause == cause,
+                          onSelected: (_) =>
+                              ref.read(_wrongFilterProvider.notifier).state =
+                                  (nodeId: filter.nodeId, cause: cause),
+                        ),
+                        const SizedBox(width: 8),
+                      ],
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                ],
+                ),
               ],
             ),
           ),
@@ -126,17 +155,14 @@ class WrongBookPage extends ConsumerWidget {
                             Row(
                               children: [
                                 Text(nodeTitle, style: const TextStyle(color: AppColors.info)),
+                                const SizedBox(width: 4),
+                                InfoTip('归因到：$attrTitle'),
                                 const Spacer(),
                                 Text(item.cause.label, style: const TextStyle(color: AppColors.warn, fontSize: 12)),
                               ],
                             ),
                             const SizedBox(height: 8),
                             MathText(item.stem),
-                            const SizedBox(height: 8),
-                            Text(
-                              '归因到：$attrTitle',
-                              style: const TextStyle(color: AppColors.muted, fontSize: 12),
-                            ),
                             Align(
                               alignment: Alignment.centerRight,
                               child: TextButton(

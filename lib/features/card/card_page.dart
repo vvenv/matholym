@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../core/widgets/math_text.dart';
 import '../../core/widgets/status_badge.dart';
 import '../../domain/generators/question.dart';
@@ -46,39 +47,46 @@ class _CardPageState extends ConsumerState<CardPage> {
           body: ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
             children: [
-              Text(node.level.label, style: const TextStyle(color: AppColors.info)),
-              const SizedBox(height: 6),
-              Text(node.subtitle, style: const TextStyle(color: AppColors.muted)),
-              if (node.prerequisites.isNotEmpty) ...[
-                const SizedBox(height: 8),
-                Text(
-                  '前置：${node.prerequisites.map((id) => view.graph.nodeById(id).title).join('、')}',
-                  style: const TextStyle(color: AppColors.muted, fontSize: 13),
-                ),
-              ],
-              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Text(node.level.label, style: const TextStyle(color: AppColors.info)),
+                  if (node.subtitle.isNotEmpty) ...[
+                    const SizedBox(width: 6),
+                    InfoTip(node.subtitle),
+                  ],
+                  if (node.prerequisites.isNotEmpty) ...[
+                    const SizedBox(width: 4),
+                    InfoTip(
+                      '前置：${node.prerequisites.map((id) => view.graph.nodeById(id).title).join('、')}',
+                    ),
+                  ],
+                  if (!node.practiceReady) ...[
+                    const SizedBox(width: 4),
+                    const InfoTip(
+                      '该节点本期仅开放知识卡片，练习将在后续版本加入。',
+                      icon: Icons.lock_outline,
+                    ),
+                  ],
+                ],
+              ),
+              const SizedBox(height: 16),
               _Section(title: '定义', child: MathText(card?.definition ?? '加载中…')),
-              _Section(
+              _Fold(
                 title: '关键定理',
                 child: _Bullets(card?.theorems ?? const []),
               ),
-              _Section(
+              _Fold(
                 title: '典型例题',
                 child: _Bullets(card?.examples ?? const []),
               ),
-              _Section(
+              _Fold(
                 title: '常见错误',
                 child: _Bullets(card?.commonMistakes ?? const []),
               ),
               const SizedBox(height: 12),
-              if (!node.practiceReady)
-                const Text(
-                  '该节点本期仅开放知识卡片，练习将在后续版本加入。',
-                  style: TextStyle(color: AppColors.warn),
-                )
-              else if (status == NodeStatus.locked)
+              if (status == NodeStatus.locked)
                 const Text('节点尚未解锁。', style: TextStyle(color: AppColors.muted))
-              else ...[
+              else if (node.practiceReady) ...[
                 const Text('专项难度', style: TextStyle(color: AppColors.muted)),
                 const SizedBox(height: 8),
                 SegmentedButton<Difficulty>(
@@ -128,6 +136,31 @@ class _Section extends StatelessWidget {
           Text(title, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
           const SizedBox(height: 8),
           child,
+        ],
+      ),
+    );
+  }
+}
+
+class _Fold extends StatelessWidget {
+  const _Fold({required this.title, required this.child});
+
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        tilePadding: EdgeInsets.zero,
+        childrenPadding: const EdgeInsets.only(bottom: 12),
+        title: Text(
+          title,
+          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+        ),
+        children: [
+          Align(alignment: Alignment.centerLeft, child: child),
         ],
       ),
     );

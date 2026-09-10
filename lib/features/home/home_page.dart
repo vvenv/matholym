@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../core/widgets/status_badge.dart';
 import '../../domain/knowledge/models.dart';
 import '../../providers.dart';
@@ -43,9 +44,15 @@ class HomePage extends ConsumerWidget {
                 style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 6),
-              Text(
-                '${StudentStage.parse(p.stage).label} · 本地档案',
-                style: const TextStyle(color: AppColors.muted),
+              Row(
+                children: [
+                  Text(
+                    StudentStage.parse(p.stage).label,
+                    style: const TextStyle(color: AppColors.muted),
+                  ),
+                  const SizedBox(width: 4),
+                  const InfoTip('进度保存在本机，无需登录。'),
+                ],
               ),
               const SizedBox(height: 20),
               Row(
@@ -80,12 +87,6 @@ class HomePage extends ConsumerWidget {
                   onOpen: () => context.push('/card/${rec.id}'),
                 ),
               const SizedBox(height: 12),
-              OutlinedButton.icon(
-                onPressed: () => context.go('/tree'),
-                icon: const Icon(Icons.account_tree),
-                label: const Text('打开完整知识树'),
-              ),
-              const SizedBox(height: 8),
               OutlinedButton.icon(
                 onPressed: (wrongs.valueOrNull ?? 0) == 0
                     ? null
@@ -182,11 +183,11 @@ class _ContinueCard extends StatelessWidget {
                     style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ),
+                if (subtitle.isNotEmpty) InfoTip(subtitle),
+                const SizedBox(width: 6),
                 StatusBadge(status: status),
               ],
             ),
-            const SizedBox(height: 4),
-            Text(subtitle, style: const TextStyle(color: AppColors.muted)),
             const SizedBox(height: 16),
             Row(
               children: [

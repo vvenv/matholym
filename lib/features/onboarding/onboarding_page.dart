@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/widgets/info_tip.dart';
 import '../../domain/knowledge/models.dart';
 import '../../providers.dart';
 
@@ -61,18 +62,19 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Spacer(),
-                  const Text(
-                    '数论之树',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.text,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '本机档案，无需网络。先选学段，再从整除定义开始往上长。',
-                    style: TextStyle(color: AppColors.muted, height: 1.5),
+                  Row(
+                    children: [
+                      const Text(
+                        '数论之树',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const InfoTip('本机档案，无需网络。先选学段，再从整除定义开始往上长。'),
+                    ],
                   ),
                   const SizedBox(height: 32),
                   TextField(
