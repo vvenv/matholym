@@ -1,0 +1,508 @@
+{
+  "angle_basic": {
+    "nodeId": "angle_basic",
+    "definition": "余角之和为 $90^\\circ$，补角之和为 $180^\\circ$，周角是 $360^\\circ$。对顶角相等。",
+    "theorems": [
+      "一个角的余角只有一个，补角也只有一个（就度数而言）。",
+      "平角是 $180^\\circ$，直角是 $90^\\circ$。"
+    ],
+    "examples": [
+      "$35^\\circ$ 的余角是 $55^\\circ$，补角是 $145^\\circ$。",
+      "钟面上 $3$ 点，时针分针成直角。"
+    ],
+    "commonMistakes": [
+      "余角和补角搞反。",
+      "把「互余」理解成两个角必须相邻。"
+    ]
+  },
+  "perimeter": {
+    "nodeId": "perimeter",
+    "definition": "周长是围成图形的边长之和。长方形周长 $2(长+宽)$，正方形周长 $4\\times$ 边长。",
+    "theorems": [
+      "周长只与外轮廓有关，与面积没有固定的换算。",
+      "不规则多边形把各边相加即可。"
+    ],
+    "examples": [
+      "长 $8$、宽 $5$ 的长方形，周长 $26$。",
+      "边长 $6$ 的正方形，周长 $24$。"
+    ],
+    "commonMistakes": [
+      "长方形做成 $长+宽$，少乘了 $2$。",
+      "把周长公式和面积公式用反。"
+    ]
+  },
+  "rect_area": {
+    "nodeId": "rect_area",
+    "definition": "长方形面积 $=$ 长 $\\times$ 宽。正方形是长方形的特例，面积 $=$ 边长 $\\times$ 边长。",
+    "theorems": [
+      "面积单位要与边长单位配套，例如厘米对平方厘米。",
+      "一个图形割补后面积不变。"
+    ],
+    "examples": [
+      "长 $9$、宽 $4$，面积 $36$。",
+      "边长 $7$ 的正方形，面积 $49$。"
+    ],
+    "commonMistakes": [
+      "用周长公式去求面积。",
+      "单位写成厘米而不是平方厘米。"
+    ]
+  },
+  "triangle_area": {
+    "nodeId": "triangle_area",
+    "definition": "三角形面积 $= \\dfrac{1}{2} \\times$ 底 $\\times$ 高。高必须垂直于所取的底。",
+    "theorems": [
+      "同底同高的三角形面积相等。",
+      "长方形沿对角线分成两个面积相等的三角形。"
+    ],
+    "examples": [
+      "底 $10$、高 $6$，面积 $30$。",
+      "底 $7$、高 $4$，面积 $14$。"
+    ],
+    "commonMistakes": [
+      "忘记乘 $\\dfrac{1}{2}$。",
+      "把斜边当成高。"
+    ]
+  },
+  "trap_area": {
+    "nodeId": "trap_area",
+    "definition": "梯形面积 $= \\dfrac{(上底+下底)\\times 高}{2}$。高是两底之间的垂直距离。",
+    "theorems": [
+      "平行四边形是上底等于下底的梯形，面积退化为底 $\\times$ 高。",
+      "梯形可以分成一个平行四边形和一个三角形。"
+    ],
+    "examples": [
+      "上底 $5$、下底 $9$、高 $4$，面积 $28$。",
+      "上底 $6$、下底 $6$、高 $3$，就是平行四边形，面积 $18$。"
+    ],
+    "commonMistakes": [
+      "只乘了一个底。",
+      "高用了腰长而不是垂直距离。"
+    ]
+  },
+  "circle_measure": {
+    "nodeId": "circle_measure",
+    "definition": "圆的周长 $C=2\\pi r$，面积 $S=\\pi r^2$。小学计算常用 $\\pi = 22/7$ 或 $3.14$。",
+    "theorems": [
+      "直径 $d=2r$，所以 $C=\\pi d$。",
+      "半径扩大 $k$ 倍，周长扩大 $k$ 倍，面积扩大 $k^2$ 倍。"
+    ],
+    "examples": [
+      "半径 $7$，取 $\\pi=22/7$，周长 $44$，面积 $154$。",
+      "半径 $14$，周长 $88$。"
+    ],
+    "commonMistakes": [
+      "周长做成 $\\pi r^2$，面积做成 $2\\pi r$。",
+      "半径和直径用混。"
+    ]
+  },
+  "parallel_angle": {
+    "nodeId": "parallel_angle",
+    "definition": "两条平行线被第三条直线所截：同位角相等，内错角相等，同旁内角互补。",
+    "theorems": [
+      "反之，同位角相等（或内错角相等）可以判定两直线平行。",
+      "同旁内角互补也可以判定平行。"
+    ],
+    "examples": [
+      "同位角是 $70^\\circ$，另一个同位角也是 $70^\\circ$。",
+      "同旁内角一个是 $110^\\circ$，另一个是 $70^\\circ$。"
+    ],
+    "commonMistakes": [
+      "把内错角做成互补。",
+      "没有平行却去用「同位角相等」。"
+    ]
+  },
+  "triangle_angle": {
+    "nodeId": "triangle_angle",
+    "definition": "任意三角形内角和为 $180^\\circ$。外角等于和它不相邻的两个内角之和。",
+    "theorems": [
+      "直角三角形两个锐角互余。",
+      "等腰三角形两底角相等。"
+    ],
+    "examples": [
+      "两角为 $40^\\circ$、$65^\\circ$，第三角 $75^\\circ$。",
+      "直角三角形一个锐角 $33^\\circ$，另一个 $57^\\circ$。"
+    ],
+    "commonMistakes": [
+      "内角和做成 $360^\\circ$。",
+      "外角只等于相邻内角。"
+    ]
+  },
+  "triangle_ineq": {
+    "nodeId": "triangle_ineq",
+    "definition": "三边能围成三角形，当且仅当任意两边之和大于第三边（且每边为正）。等价于最短两边之和大于最长边。",
+    "theorems": [
+      "两边之差小于第三边。",
+      "等腰或等边当然满足，但满足的不必等腰。"
+    ],
+    "examples": [
+      "$3,5,7$ 可以：$3+5>7$。",
+      "$3,5,8$ 不可以：$3+5=8$，只能共线。"
+    ],
+    "commonMistakes": [
+      "用「大于等于」，把退化当成三角形。",
+      "只检查了一组两边之和。"
+    ]
+  },
+  "pythagorean": {
+    "nodeId": "pythagorean",
+    "definition": "直角三角形两直角边 $a,b$ 与斜边 $c$ 满足 $a^2+b^2=c^2$。常用数组：$3$-$4$-$5$，$5$-$12$-$13$，以及它们的整数倍。",
+    "theorems": [
+      "反过来，$a^2+b^2=c^2$ 时必有直角（勾股定理的逆定理）。",
+      "等腰直角三角形斜边是直角边的 $\\sqrt{2}$ 倍。"
+    ],
+    "examples": [
+      "直角边 $6$ 与 $8$，斜边 $10$。",
+      "直角边 $5$ 与 $12$，斜边 $13$。"
+    ],
+    "commonMistakes": [
+      "把一条直角边当成斜边去平方。",
+      "只记得 $3$-$4$-$5$，遇到倍数不会缩放。"
+    ]
+  },
+  "similar_tri": {
+    "nodeId": "similar_tri",
+    "definition": "相似三角形对应角相等，对应边成比例。对应边比等于相似比，面积比等于相似比的平方。",
+    "theorems": [
+      "AA、SAS、SSS 可以判定相似。",
+      "对应边一定要对着对应角，不能随便两条边相比。"
+    ],
+    "examples": [
+      "相似比 $2:3$，小三角形一边 $4$，对应大边是 $6$。",
+      "相似比 $1:2$，面积比 $1:4$。"
+    ],
+    "commonMistakes": [
+      "边没有对应就相比。",
+      "面积比做成相似比而不是平方。"
+    ]
+  },
+  "box_volume": {
+    "nodeId": "box_volume",
+    "definition": "长方体体积 $=$ 长 $\\times$ 宽 $\\times$ 高。正方体是棱长的立方。体积单位与棱长单位配套。",
+    "theorems": [
+      "体积也可以看成底面积乘高。",
+      "棱长扩大 $k$ 倍，体积扩大 $k^3$ 倍。"
+    ],
+    "examples": [
+      "长 $5$、宽 $4$、高 $3$，体积 $60$。",
+      "棱长 $6$ 的正方体，体积 $216$。"
+    ],
+    "commonMistakes": [
+      "只乘了两个数，做成面积。",
+      "单位用平方而不是立方。"
+    ]
+  },
+  "cut_fill": {
+    "nodeId": "cut_fill",
+    "definition": "不规则图形的面积常用割补：大正方形减去挖去的小块，或把图形拼成长方形。",
+    "theorems": [
+      "边长 $A$ 的正方形挖去边长 $a$ 的正方形，剩余 $A^2-a^2$。",
+      "画框面积 $=$ 外框面积 $-$ 内框面积。"
+    ],
+    "examples": [
+      "边长 $10$ 挖去边长 $4$，剩余 $84$。",
+      "外边 $12$、四周各宽 $2$，内边 $12-4=8$，框面积 $144-64=80$。"
+    ],
+    "commonMistakes": [
+      "边宽两边都要减，内边做成 $A-$ 边宽。",
+      "只减了一条边的面积。"
+    ]
+  },
+  "surface_box": {
+    "nodeId": "surface_box",
+    "definition": "长方体表面积 $=2($长宽 $+$ 长高 $+$ 宽高$)$。正方体是 $6$ 个面，每个棱长平方。",
+    "theorems": [
+      "六个面两两相对，三组面积各算两次。",
+      "棱长扩大 $k$ 倍，表面积扩大 $k^2$ 倍。"
+    ],
+    "examples": [
+      "长 $5$、宽 $4$、高 $3$，表面积 $94$。",
+      "棱长 $6$ 的正方体，表面积 $216$。"
+    ],
+    "commonMistakes": [
+      "忘了乘 $2$。",
+      "和体积公式乘混。"
+    ]
+  },
+  "circle_angle": {
+    "nodeId": "circle_angle",
+    "definition": "同弧所对的圆周角是圆心角的一半。直径所对的圆周角是直角。",
+    "theorems": [
+      "同弧上的圆周角相等。",
+      "直径是斜边时，另两点的夹角为 $90^\\circ$。"
+    ],
+    "examples": [
+      "圆心角 $80^\\circ$，同弧圆周角 $40^\\circ$。",
+      "直径所对直角三角形中，一个锐角 $35^\\circ$，另一个 $55^\\circ$。"
+    ],
+    "commonMistakes": [
+      "把圆周角和圆心角搞反。",
+      "不同弧却当成同弧。"
+    ]
+  },
+  "solid_adv": {
+    "nodeId": "solid_adv",
+    "definition": "圆柱体积 $\\pi r^2 h$，圆锥体积是等底等高圆柱的三分之一。侧面积看展开图：圆柱侧面是长方形。",
+    "theorems": [
+      "圆锥体积 $\\dfrac{1}{3}\\pi r^2 h$。",
+      "圆柱侧面积 $=2\\pi r h$（底面周长乘高）。"
+    ],
+    "examples": [
+      "半径 $7$、高 $3$，取 $\\pi=22/7$，圆柱体积 $462$。",
+      "同样数据的圆锥体积 $154$。"
+    ],
+    "commonMistakes": [
+      "圆锥忘记乘 $\\dfrac{1}{3}$。",
+      "侧面积误用了底面积。"
+    ]
+  },
+  "poly_angle": {
+    "nodeId": "poly_angle",
+    "definition": "$n$ 边形内角和 $(n-2)\\times 180^\\circ$。正 $n$ 边形每个外角 $360^\\circ/n$，外角和恒为 $360^\\circ$。",
+    "theorems": [
+      "从一顶点连对角线，分成 $n-2$ 个三角形。",
+      "内角与相邻外角互补。"
+    ],
+    "examples": [
+      "六边形内角和 $720^\\circ$。",
+      "正八边形外角 $45^\\circ$。"
+    ],
+    "commonMistakes": [
+      "内角和做成 $n\\times 180$。",
+      "外角和当成 $180n$。"
+    ]
+  },
+  "sector_arc": {
+    "nodeId": "sector_arc",
+    "definition": "弧长、扇形面积都按圆心角占整圆的比例：弧长 $=2\\pi r\\times\\theta/360$，面积 $=\\pi r^2\\times\\theta/360$。",
+    "theorems": [
+      "半圆对应 $180^\\circ$，弧长、面积都是一半。",
+      "$90^\\circ$ 是四分之一。"
+    ],
+    "examples": [
+      "半径 $14$、$90^\\circ$，$\\pi=22/7$，弧长 $22$，扇形面积 $154$。"
+    ],
+    "commonMistakes": [
+      "把圆心角当弧度却仍除 $360$。",
+      "面积公式用成周长比例却乘错了。"
+    ]
+  },
+  "symmetry": {
+    "nodeId": "symmetry",
+    "definition": "关于 $x$ 轴对称：纵坐标变号。关于 $y$ 轴：横坐标变号。关于原点：两个都变号。",
+    "theorems": [
+      "对称轴是两点连线的垂直平分线。",
+      "轴对称保持距离和角度。"
+    ],
+    "examples": [
+      "$(3,5)$ 关于 $x$ 轴是 $(3,-5)$。",
+      "$(4,2)$ 关于原点是 $(-4,-2)$。"
+    ],
+    "commonMistakes": [
+      "关于 $x$ 轴却改了横坐标。",
+      "原点对称只改了一个坐标。"
+    ]
+  },
+  "net_solid": {
+    "nodeId": "net_solid",
+    "definition": "展开图把立体的面摊到平面上，不重叠、不撕裂。长方体、正方体都是 $6$ 个面，展开图面积等于表面积。",
+    "theorems": [
+      "正方体展开图有 $11$ 种常见形状，都由 $6$ 个正方形组成。",
+      "相对的面在展开图里不相邻。"
+    ],
+    "examples": [
+      "$2\\times 3\\times 4$ 长方体展开面积 $52$。",
+      "正方体展开图是 $6$ 个正方形。"
+    ],
+    "commonMistakes": [
+      "漏面或两面重叠。",
+      "把体积数字当成展开面积。"
+    ]
+  },
+  "reflect_path": {
+    "nodeId": "reflect_path",
+    "definition": "镜面反射最短路：把一侧展开到对称位置，两点连直线，再折回原图。走廊两侧的高度差之和与宽度组成直角三角形。",
+    "theorems": [
+      "入射角等于反射角，等价于展开后走直线。",
+      "长度用勾股定理。"
+    ],
+    "examples": [
+      "宽 $3$、高度和 $4$，最短路 $5$。"
+    ],
+    "commonMistakes": [
+      "沿墙直角走，当成最短。",
+      "展开时把高度相减而不是相加。"
+    ]
+  },
+  "sphere_vol": {
+    "nodeId": "sphere_vol",
+    "definition": "球体积 $\\dfrac{4}{3}\\pi r^3$，表面积 $4\\pi r^2$。练习里常求 $\\pi$ 前面的系数 $k$。",
+    "theorems": [
+      "半径扩大 $t$ 倍，表面积 $t^2$ 倍，体积 $t^3$ 倍。",
+      "$r$ 是 $3$ 的倍数时，$\\dfrac{4}{3}r^3$ 是整数。"
+    ],
+    "examples": [
+      "$r=3$，体积 $36\\pi$。",
+      "$r=5$，表面积 $100\\pi$。"
+    ],
+    "commonMistakes": [
+      "体积忘了 $4/3$。",
+      "表面积做成 $4r$ 或 $2\\pi r$。"
+    ]
+  },
+  "midline": {
+    "nodeId": "midline",
+    "definition": "三角形中位线平行于第三边且等于它的一半。梯形中位线平行于两底且等于两底和的一半。",
+    "theorems": [
+      "中位线把三角形分成小相似形与梯形。"
+    ],
+    "examples": [
+      "底 $12$ 的中位线是 $6$。",
+      "梯形两底 $5$ 与 $9$，中位线 $7$。"
+    ],
+    "commonMistakes": [
+      "梯形中位线只取一底。",
+      "三角形中位线做成两腰平均。"
+    ]
+  },
+  "cong_tri": {
+    "nodeId": "cong_tri",
+    "definition": "全等三角形对应边相等、对应角相等。顶点书写顺序标明对应。",
+    "theorems": [
+      "$\\triangle ABC\\cong\\triangle DEF$ 则 $AB=DE$，$\\angle A=\\angle D$。"
+    ],
+    "examples": [
+      "$AB=7$ 则对应边 $DE=7$。"
+    ],
+    "commonMistakes": [
+      "对应错边：按长度而不是按顶点顺序。",
+      "全等与相似的对应搞混。"
+    ]
+  },
+  "area_ratio": {
+    "nodeId": "area_ratio",
+    "definition": "相似三角形面积比等于相似比的平方。等高三角形面积比等于底之比。",
+    "theorems": [
+      "相似比 $2:3$，面积比 $4:9$。"
+    ],
+    "examples": [
+      "小面积 $8$，相似比 $2:3$，大面积 $18$。"
+    ],
+    "commonMistakes": [
+      "面积比直接用边比。",
+      "平方只平方了一边。"
+    ]
+  },
+  "tangent_len": {
+    "nodeId": "tangent_len",
+    "definition": "从圆外一点所引两条切线长相等。三角形内切圆切线长为 $s-a$。",
+    "theorems": [
+      "切线垂直于过切点的半径。",
+      "$s-a=\\dfrac{b+c-a}{2}$。"
+    ],
+    "examples": [
+      "边 $3,4,5$，斜边上的切线长 $1$。"
+    ],
+    "commonMistakes": [
+      "切线长当成半径。",
+      "$s-a$ 用错顶点。"
+    ]
+  },
+  "cyclic_quad": {
+    "nodeId": "cyclic_quad",
+    "definition": "圆内接四边形对角互补，外角等于内对角。",
+    "theorems": [
+      "$\\angle A+\\angle C=180^\\circ$。"
+    ],
+    "examples": [
+      "一角 $70^\\circ$，对角 $110^\\circ$。"
+    ],
+    "commonMistakes": [
+      "邻角互补。",
+      "和平行四边形搞混。"
+    ]
+  },
+  "cone_slant": {
+    "nodeId": "cone_slant",
+    "definition": "圆锥母线 $l=\\sqrt{r^2+h^2}$。侧面展开是半径为 $l$、弧长 $2\\pi r$ 的扇形，圆心角 $360^\\circ\\cdot r/l$。",
+    "theorems": [
+      "母线、半径、高组成直角三角形。"
+    ],
+    "examples": [
+      "$r=3,h=4$，母线 $5$，展开角 $216^\\circ$。"
+    ],
+    "commonMistakes": [
+      "展开角做成 $360\\cdot l/r$。",
+      "母线当成高。"
+    ]
+  },
+  "altitude": {
+    "nodeId": "altitude",
+    "definition": "等高三角形面积比等于底之比。",
+    "theorems": ["同高时面积与底成正比例。"],
+    "examples": ["底 $4$ 与 $6$，面积 $12$ 则另一块 $18$。"],
+    "commonMistakes": ["做成底的平方比。"]
+  },
+  "intercept": {
+    "nodeId": "intercept",
+    "definition": "平行线截三角形两边，对应线段成比例。",
+    "theorems": ["$AD/DB=AE/EC$。"],
+    "examples": ["比 $2:3$，短段 $4$，长段 $6$。"],
+    "commonMistakes": ["把整段和一段搞混。"]
+  },
+  "bisector": {
+    "nodeId": "bisector",
+    "definition": "角平分线分对边的两段之比等于两邻边之比。",
+    "theorems": ["$BD/DC=AB/AC$。"],
+    "examples": ["邻边 $6,3$，对边 $12$，靠 $6$ 的一段是 $8$。"],
+    "commonMistakes": ["对段比写成邻边之差。"]
+  },
+  "same_arc": {
+    "nodeId": "same_arc",
+    "definition": "同弧所对圆周角相等，且等于圆心角的一半。四点共圆时同弧对角相等。",
+    "theorems": ["圆周角是同弧圆心角之半。"],
+    "examples": ["圆心角 $80^\\circ$，圆周角 $40^\\circ$。"],
+    "commonMistakes": ["当成相等而不是一半。"]
+  },
+  "ext_quad": {
+    "nodeId": "ext_quad",
+    "definition": "圆外切四边形对边之和相等：$a+c=b+d$。",
+    "theorems": ["切线长相等推出对边和相等。"],
+    "examples": ["三边 $6,8,7$，第四边 $5$。"],
+    "commonMistakes": ["和对角互补搞混（那是内接）。"]
+  },
+  "power_pt": {
+    "nodeId": "power_pt",
+    "definition": "相交弦：$a\\cdot b=c\\cdot d$。切割线：$PT^2=PA\\cdot PB$。",
+    "theorems": ["本质是相似三角形对应边成比例。"],
+    "examples": ["弦段 $3,8$ 与 $4,x$，则 $x=6$。", "外段 $4$ 整段 $9$，切线 $6$。"],
+    "commonMistakes": ["切割线用外段乘另一外段。"]
+  },
+  "ext_angle": {
+    "nodeId": "ext_angle",
+    "definition": "三角形一个外角等于不相邻的两个内角之和。",
+    "theorems": ["外角也等于 $180^\\circ$ 减去相邻内角。"],
+    "examples": ["不相邻内角 $40^\\circ$、$70^\\circ$，外角 $110^\\circ$。"],
+    "commonMistakes": ["外角当成相邻内角。"]
+  },
+  "iso_base": {
+    "nodeId": "iso_base",
+    "definition": "等腰三角形两腰相等，两底角相等。顶角与底角满足 $顶+2\\times 底=180^\\circ$。",
+    "theorems": ["等边对等角。"],
+    "examples": ["顶角 $80^\\circ$，底角各 $50^\\circ$。"],
+    "commonMistakes": ["把顶角也当成底角。"]
+  },
+  "thales": {
+    "nodeId": "thales",
+    "definition": "直径所对的圆周角是直角。点在以 $AB$ 为直径的圆周上，则 $\\angle ACB=90^\\circ$。",
+    "theorems": ["直角三角形斜边是外接圆直径。"],
+    "examples": ["直径 $AB$，$C$ 在圆周上，$\\angle C=90^\\circ$。"],
+    "commonMistakes": ["当成圆心角。"]
+  },
+  "cyclic_out": {
+    "nodeId": "cyclic_out",
+    "definition": "圆内接四边形的外角等于它的内对角。",
+    "theorems": ["对角互补，所以外角补回来等于对角。"],
+    "examples": ["内角 $70^\\circ$，对角的外角也是 $70^\\circ$。"],
+    "commonMistakes": ["外角当成邻补角 $180^\\circ$ 减自己，却忘了问的是对角那侧。"]
+  }
+}

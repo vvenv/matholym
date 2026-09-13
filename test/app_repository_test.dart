@@ -21,7 +21,7 @@ void main() {
     await db.close();
   });
 
-  test('create profile, unlock after challenge, record wrong item', () async {
+  test('create profile, master after challenge, record wrong item', () async {
     expect(await repo.currentProfile(), isNull);
 
     final profile = await repo.createProfile(
@@ -30,7 +30,9 @@ void main() {
     );
     var view = await repo.loadGraph(profile.id);
     expect(view.statusOf('divisibility_def'), NodeStatus.learning);
-    expect(view.statusOf('division_algorithm'), NodeStatus.locked);
+    expect(view.statusOf('division_algorithm'), NodeStatus.learning);
+    expect(view.progress, hasLength(knowledgeGraph.nodes.length));
+    expect(view.graph.area.id, 'number_theory');
 
     final miss = questionEngine.generate(
       templateId: 'div_def.divides',
@@ -70,7 +72,34 @@ void main() {
 
     view = await repo.loadGraph(profile.id);
     expect(view.statusOf('divisibility_def'), NodeStatus.mastered);
-    expect(view.unlocked.contains('division_algorithm'), isTrue);
-    expect(view.unlocked.contains('primes_composites'), isTrue);
+    expect(view.mastered, {'divisibility_def'});
+    // Mastering one node leaves the rest where they were: no gate to open.
+    expect(view.statusOf('division_algorithm'), NodeStatus.learning);
+    expect(view.recommended()?.id, 'division_algorithm');
+  });
+
+  test('combinatorics nodes are seeded when the store has both trees', () async {
+    repo = AppRepository(
+      db,
+      SeedStore(
+        graphs: {
+          knowledgeGraph.area.id: knowledgeGraph,
+          combinatoricsGraph.area.id: combinatoricsGraph,
+        },
+        cards: const {},
+      ),
+    );
+    final profile = await repo.createProfile(
+      nickname: '同学',
+      stage: StudentStage.junior,
+    );
+    final combo = await repo.loadGraph(
+      profile.id,
+      areaId: KnowledgeArea.combinatoricsId,
+    );
+    expect(combo.graph.nodes, hasLength(31));
+    expect(combo.statusOf('count_add'), NodeStatus.learning);
+    // Progress rows are seeded for every tree, this one included.
+    expect(combo.progress.keys, contains('pigeonhole'));
   });
 }

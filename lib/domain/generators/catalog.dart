@@ -1,11 +1,35 @@
 import 'dart:math';
 
 import '../number_theory.dart';
+import 'algebra_catalog.dart';
+import 'calculation_catalog.dart';
+import 'congruence_catalog.dart';
+import 'counting_catalog.dart';
+import 'geometry_catalog.dart';
+import 'logic_catalog.dart';
 import 'question.dart';
+import 'classic_catalog.dart';
+import 'depth_catalog.dart';
+import 'encore_catalog.dart';
+import 'syllabus_catalog.dart';
 
 final questionEngine = QuestionEngine(questionTemplates);
 
 final List<QuestionTemplate> questionTemplates = [
+  ..._coreNumberTheoryTemplates,
+  ...congruenceTemplates,
+  ...countingTemplates,
+  ...algebraTemplates,
+  ...geometryTemplates,
+  ...calculationTemplates,
+  ...logicTemplates,
+  ...syllabusTemplates,
+  ...classicTemplates,
+  ...depthTemplates,
+  ...encoreTemplates,
+];
+
+final List<QuestionTemplate> _coreNumberTheoryTemplates = [
   QuestionTemplate(
     id: 'div_def.divides',
     nodeId: 'divisibility_def',
@@ -138,9 +162,22 @@ final List<QuestionTemplate> questionTemplates = [
     difficulties: {Difficulty.medium, Difficulty.contest},
     build: _nextPrime,
   ),
+  QuestionTemplate(
+    id: 'gcd.three',
+    nodeId: 'gcd',
+    difficulties: {Difficulty.medium, Difficulty.contest},
+    build: _gcdThree,
+  ),
+  QuestionTemplate(
+    id: 'fta.omega',
+    nodeId: 'fta',
+    difficulties: {Difficulty.basic, Difficulty.medium},
+    build: _distinctPrimes,
+  ),
 ];
 
-String _m(Object v) => '\$$v\$';
+/// Inline TeX. Factor strings arrive as `2*17`; typeset the product as ×.
+String _m(Object v) => '\$${'$v'.replaceAll('*', r' \times ')}\$';
 
 int _rand(Random rng, int lo, int hi) => lo + rng.nextInt(hi - lo + 1);
 
@@ -156,7 +193,7 @@ GeneratedQuestion _q({
   required List<String> steps,
   required List<String> nodeRefs,
   List<String> choices = const [],
-  String answerHint = '',
+  ({int min, int max})? answerRange,
 }) {
   return GeneratedQuestion(
     templateId: templateId,
@@ -170,7 +207,7 @@ GeneratedQuestion _q({
     steps: steps,
     nodeRefs: nodeRefs,
     choices: choices,
-    answerHint: answerHint,
+    answerRange: answerRange,
   );
 }
 
@@ -191,7 +228,6 @@ GeneratedQuestion _divides(int seed, Difficulty d) {
     kind: QuestionKind.judge,
     stem: '判断：${_m(a)} 能否整除 ${_m(b)}？回答「是」或「否」。',
     answer: yes ? '是' : '否',
-    answerHint: '是 / 否',
     hints: [
       '回忆定义：存在整数 k 使得 ${_m('$b = $a k')}，则称 a 整除 b。',
       '看 ${_m(b)} 除以 ${_m(a)} 的余数是否为 0。',
@@ -209,7 +245,17 @@ GeneratedQuestion _divisorCount(int seed, Difficulty d) {
   final n = switch (d) {
     Difficulty.basic => _rand(rng, 6, 36),
     Difficulty.medium => _rand(rng, 20, 120),
-    Difficulty.contest => [72, 84, 90, 96, 108, 120, 144, 180, 240][rng.nextInt(9)],
+    Difficulty.contest => [
+      72,
+      84,
+      90,
+      96,
+      108,
+      120,
+      144,
+      180,
+      240,
+    ][rng.nextInt(9)],
   };
   final count = NumberTheory.divisorCount(n);
   final factors = NumberTheory.formatFactorization(NumberTheory.factorize(n));
@@ -221,11 +267,7 @@ GeneratedQuestion _divisorCount(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '求正整数 ${_m(n)} 的正因数个数。',
     answer: '$count',
-    answerHint: '正整数',
-    hints: [
-      '先列出 ${_m(n)} 的全部正因数，或先做质因数分解。',
-      '若 n 的质因数分解已知，则正因数个数为各指数加一再相乘。',
-    ],
+    hints: ['先列出 ${_m(n)} 的全部正因数，或先做质因数分解。', '若 n 的质因数分解已知，则正因数个数为各指数加一再相乘。'],
     steps: [
       '${_m('$n = $factors')}。',
       '正因数个数为 ${_m(count)}。',
@@ -249,15 +291,11 @@ GeneratedQuestion _quotRem(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '做带余除法：${_m('$a \\div $b')}。把商和余数写成「商,余数」，例如 3,2。',
     answer: '$q,$r',
-    answerHint: '商,余数',
     hints: [
       '带余除法：${_m('a = bq + r')}，其中余数满足 ${_m('0 \\le r < b')}。',
       '先估商，再算 ${_m('r = a - bq')}。',
     ],
-    steps: [
-      '${_m('$a = $b \\times $q + $r')}。',
-      '商是 ${_m(q)}，余数是 ${_m(r)}。',
-    ],
+    steps: ['${_m('$a = $b \\times $q + $r')}。', '商是 ${_m(q)}，余数是 ${_m(r)}。'],
     nodeRefs: ['division_algorithm'],
   );
 }
@@ -274,13 +312,10 @@ GeneratedQuestion _divIdentity(int seed, Difficulty d) {
     nodeId: 'division_algorithm',
     difficulty: d,
     kind: QuestionKind.fill,
-    stem: '已知 ${_m('$a = $b \\times q + $r')} 且 ${_m('0 \\le $r < $b')}，求 q。',
+    stem:
+        '已知 ${_m('$a = $b \\times q + r')}，其中 ${_m('r = $r')} 且 ${_m('0 \\le r < $b')}，求 q。',
     answer: '$q',
-    answerHint: '整数',
-    hints: [
-      '把等式看成带余除法的标准形。',
-      'q 就是 ${_m(a)} 除以 ${_m(b)} 的商。',
-    ],
+    hints: ['把等式看成带余除法的标准形。', 'q 就是 ${_m(a)} 除以 ${_m(b)} 的商。'],
     steps: ['${_m('$a \\div $b')} 的商为 ${_m(q)}。'],
     nodeRefs: ['division_algorithm'],
   );
@@ -289,7 +324,11 @@ GeneratedQuestion _divIdentity(int seed, Difficulty d) {
 GeneratedQuestion _rulesCheck(int seed, Difficulty d) {
   final rng = Random(seed);
   final divisor = [2, 3, 5, 9, 11][rng.nextInt(5)];
-  final n = _rand(rng, d == Difficulty.basic ? 20 : 100, d == Difficulty.basic ? 99 : 9999);
+  final n = _rand(
+    rng,
+    d == Difficulty.basic ? 20 : 100,
+    d == Difficulty.basic ? 99 : 9999,
+  );
   final yes = NumberTheory.hasDivisibilityRule(divisor, n);
   final rule = switch (divisor) {
     2 => '看个位是否为偶数',
@@ -306,7 +345,6 @@ GeneratedQuestion _rulesCheck(int seed, Difficulty d) {
     kind: QuestionKind.judge,
     stem: '判断：${_m(n)} 能否被 ${_m(divisor)} 整除？回答「是」或「否」。请用整除特征，不要硬除。',
     answer: yes ? '是' : '否',
-    answerHint: '是 / 否',
     hints: [
       '被 ${_m(divisor)} 整除的特征：$rule。',
       divisor == 3 || divisor == 9
@@ -315,10 +353,7 @@ GeneratedQuestion _rulesCheck(int seed, Difficulty d) {
           ? '交替和为 ${NumberTheory.alternatingDigitSum(n)}。'
           : '观察个位 ${n % 10}。',
     ],
-    steps: [
-      '所用特征：$rule。',
-      yes ? '结论：能整除。' : '结论：不能整除。',
-    ],
+    steps: ['所用特征：$rule。', yes ? '结论：能整除。' : '结论：不能整除。'],
     nodeRefs: ['divisibility_rules'],
   );
 }
@@ -334,7 +369,10 @@ GeneratedQuestion _missingDigit(int seed, Difficulty d) {
     digits = [for (var i = 0; i < len; i++) _rand(rng, i == 0 ? 1 : 0, 9)];
     final blank = _rand(rng, 0, len - 1);
     digits[blank] = null;
-    hits = NumberTheory.missingDigitCandidates(digits: digits, divisor: divisor);
+    hits = NumberTheory.missingDigitCandidates(
+      digits: digits,
+      divisor: divisor,
+    );
     guard++;
   } while (hits.length != 1 && guard < 80);
   if (hits.length != 1) {
@@ -351,13 +389,11 @@ GeneratedQuestion _missingDigit(int seed, Difficulty d) {
     nodeId: 'divisibility_rules',
     difficulty: d,
     kind: QuestionKind.fill,
-    stem: '求一位数字 ${_m(r'\square')}，使得 ${_m(shown)} 能被 ${_m(divisor)} 整除。若有多个取最小。',
+    stem:
+        '求一位数字 ${_m(r'\square')}，使得 ${_m(shown)} 能被 ${_m(divisor)} 整除。若有多个取最小。',
     answer: '$answer',
-    answerHint: '0-9 的一位数字',
     hints: [
-      divisor == 9
-          ? '被 9 整除：各位数字之和是 9 的倍数。'
-          : '被 11 整除：从右起交替和是 11 的倍数。',
+      divisor == 9 ? '被 9 整除：各位数字之和是 9 的倍数。' : '被 11 整除：从右起交替和是 11 的倍数。',
       '把空位设为未知数 x，列出关于 x 的整除条件。',
     ],
     steps: [
@@ -365,13 +401,27 @@ GeneratedQuestion _missingDigit(int seed, Difficulty d) {
       '代入后 ${_m(filled)} 能被 ${_m(divisor)} 整除。',
     ],
     nodeRefs: ['divisibility_rules'],
+    answerRange: (min: 0, max: 9),
   );
 }
 
 GeneratedQuestion _primeJudge(int seed, Difficulty d) {
   final rng = Random(seed);
   final n = switch (d) {
-    Difficulty.basic => [2, 3, 4, 9, 11, 15, 17, 21, 25, 27, 29, 33][rng.nextInt(12)],
+    Difficulty.basic => [
+      2,
+      3,
+      4,
+      9,
+      11,
+      15,
+      17,
+      21,
+      25,
+      27,
+      29,
+      33,
+    ][rng.nextInt(12)],
     Difficulty.medium => _rand(rng, 20, 120),
     Difficulty.contest => _rand(rng, 100, 250),
   };
@@ -384,7 +434,6 @@ GeneratedQuestion _primeJudge(int seed, Difficulty d) {
     kind: QuestionKind.judge,
     stem: '判断：${_m(n)} 是质数吗？回答「是」或「否」。',
     answer: yes ? '是' : '否',
-    answerHint: '是 / 否',
     hints: [
       '质数只有 1 和自身两个正因数；合数至少有三个正因数。1 既非质也非合。',
       '试除不超过 ${_m('\\sqrt{$n}')} 的质数。',
@@ -419,15 +468,8 @@ GeneratedQuestion _primeCount(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '闭区间 [${_m(low)}, ${_m(high)}] 内有多少个质数？',
     answer: '$count',
-    answerHint: '非负整数',
-    hints: [
-      '枚举区间内整数并做素性判定，或借助筛法。',
-      '注意区间是闭区间。',
-    ],
-    steps: [
-      '该区间内质数为：${listed.join(', ')}。',
-      '共 ${_m(count)} 个。',
-    ],
+    hints: ['枚举区间内整数并做素性判定，或借助筛法。', '注意区间是闭区间。'],
+    steps: ['该区间内质数为：${listed.join(', ')}。', '共 ${_m(count)} 个。'],
     nodeRefs: ['primes_composites', 'sieve'],
   );
 }
@@ -445,14 +487,8 @@ GeneratedQuestion _smallestFactor(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '求 ${_m(n)} 的最小质因数。',
     answer: '$p',
-    answerHint: '质数',
-    hints: [
-      '从 2, 3, 5, … 依次试除，第一个整除 ${_m(n)} 的质数即是。',
-      '若 ${_m(n)} 为偶数则答案为 2。',
-    ],
-    steps: [
-      '最小质因数是 ${_m(p)}，因为 ${_m('$p\\mid $n')} 且更小的质数都不能整除。',
-    ],
+    hints: ['从 2, 3, 5, … 依次试除，第一个整除 ${_m(n)} 的质数即是。', '若 ${_m(n)} 为偶数则答案为 2。'],
+    steps: ['最小质因数是 ${_m(p)}，因为 ${_m('$p\\mid $n')} 且更小的质数都不能整除。'],
     nodeRefs: ['primes_composites'],
   );
 }
@@ -460,9 +496,29 @@ GeneratedQuestion _smallestFactor(int seed, Difficulty d) {
 GeneratedQuestion _factorize(int seed, Difficulty d) {
   final rng = Random(seed);
   final n = switch (d) {
-    Difficulty.basic => [12, 18, 20, 24, 28, 30, 36, 40, 42, 45][rng.nextInt(10)],
+    Difficulty.basic => [
+      12,
+      18,
+      20,
+      24,
+      28,
+      30,
+      36,
+      40,
+      42,
+      45,
+    ][rng.nextInt(10)],
     Difficulty.medium => [48, 54, 60, 72, 84, 90, 96, 108, 120][rng.nextInt(9)],
-    Difficulty.contest => [180, 210, 240, 252, 300, 336, 360, 420][rng.nextInt(8)],
+    Difficulty.contest => [
+      180,
+      210,
+      240,
+      252,
+      300,
+      336,
+      360,
+      420,
+    ][rng.nextInt(8)],
   };
   final formatted = NumberTheory.formatFactorization(NumberTheory.factorize(n));
   return _q(
@@ -471,13 +527,9 @@ GeneratedQuestion _factorize(int seed, Difficulty d) {
     nodeId: 'fta',
     difficulty: d,
     kind: QuestionKind.fill,
-    stem: '将 ${_m(n)} 分解为标准质因数形式。用 p^k 相乘，如 2^3*3。指数为 1 可省略。',
+    stem: '将 ${_m(n)} 分解为标准质因数形式。',
     answer: formatted,
-    answerHint: '如 2^3*3*5',
-    hints: [
-      '算术基本定理：每个大于 1 的整数可唯一写成质数幂的乘积（不计次序）。',
-      '从小到大试除质数，并累计指数。',
-    ],
+    hints: ['算术基本定理：每个大于 1 的整数可唯一写成质数幂的乘积（不计次序）。', '从小到大试除质数，并累计指数。'],
     steps: ['${_m('$n = $formatted')}。'],
     nodeRefs: ['fta'],
   );
@@ -500,15 +552,8 @@ GeneratedQuestion _ftaDivisorCount(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '已知正整数 ${_m(n)}，利用质因数分解求它的正因数个数。',
     answer: '$count',
-    answerHint: '正整数',
-    hints: [
-      '先分解 ${_m(n)}，再用「指数加一再相乘」。',
-      '${_m('$n = $formatted')}。',
-    ],
-    steps: [
-      '${_m('$n = $formatted')}。',
-      '正因数个数 = $formula = ${_m(count)}。',
-    ],
+    hints: ['先分解 ${_m(n)}，再用「指数加一再相乘」。', '${_m('$n = $formatted')}。'],
+    steps: ['${_m('$n = $formatted')}。', '正因数个数 = $formula = ${_m(count)}。'],
     nodeRefs: ['fta'],
   );
 }
@@ -525,11 +570,7 @@ GeneratedQuestion _sieveList(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '用埃拉托斯特尼筛法筛 2 到 ${_m(n)} 后，剩下的质数从小到大用逗号分隔写出。',
     answer: primes.join(','),
-    answerHint: '如 2,3,5,7',
-    hints: [
-      '从 2 开始，划掉它的倍数；再对下一个未划掉的数重复。',
-      '只需筛到 ${_m('\\sqrt{$n}')} 即可。',
-    ],
+    hints: ['从 2 开始，划掉它的倍数；再对下一个未划掉的数重复。', '只需筛到 ${_m('\\sqrt{$n}')} 即可。'],
     steps: ['筛完剩下：${primes.join(', ')}。'],
     nodeRefs: ['sieve'],
   );
@@ -547,11 +588,7 @@ GeneratedQuestion _sieveCount(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '用筛法处理 1 到 ${_m(n)} 后，还剩多少个质数？（1 不是质数）',
     answer: '${primes.length}',
-    answerHint: '非负整数',
-    hints: [
-      '先划掉 1，再按倍数划合数。',
-      '剩下的个数即 ${_m('\\pi($n)')}。',
-    ],
+    hints: ['先划掉 1，再按倍数划合数。', '剩下的个数即 ${_m('\\pi($n)')}。'],
     steps: ['${_m('\\pi($n) = ${primes.length}')}。'],
     nodeRefs: ['sieve'],
   );
@@ -580,11 +617,7 @@ GeneratedQuestion _gcdValue(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '求 ${_m('\\gcd($a, $b)')}。',
     answer: '$ans',
-    answerHint: '正整数',
-    hints: [
-      '欧几里得算法：反复用较大数除以较小数，取余数。',
-      '${_m(r'\gcd(a,b)=\gcd(b,a\bmod b)')}。',
-    ],
+    hints: ['欧几里得算法：反复用较大数除以较小数，取余数。', '${_m(r'\gcd(a,b)=\gcd(b,a\bmod b)')}。'],
     steps: ['欧几里得算法得到 ${_m('\\gcd($a, $b) = $ans')}。'],
     nodeRefs: ['gcd'],
   );
@@ -608,14 +641,8 @@ GeneratedQuestion _euclidStep(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '用欧几里得算法求 ${_m('\\gcd($a, $b)')} 时，第一步得到的余数是多少？',
     answer: '$r',
-    answerHint: '非负整数',
-    hints: [
-      '第一步计算 ${_m('$a \\bmod $b')}。',
-      '带余除法：${_m('a = bq + r')}。',
-    ],
-    steps: [
-      '${_m('$a = $b \\times ${a ~/ b} + $r')}，故余数为 ${_m(r)}。',
-    ],
+    hints: ['第一步计算 ${_m('$a \\bmod $b')}。', '带余除法：${_m('a = bq + r')}。'],
+    steps: ['${_m('$a = $b \\times ${a ~/ b} + $r')}，故余数为 ${_m(r)}。'],
     nodeRefs: ['gcd', 'division_algorithm'],
   );
 }
@@ -634,13 +661,10 @@ GeneratedQuestion _gcdFromFactors(int seed, Difficulty d) {
     nodeId: 'gcd',
     difficulty: d,
     kind: QuestionKind.fill,
-    stem: '先分解再求公约数：${_m('$a = $fa')}，${_m('$b = $fb')}。求 ${_m('\\gcd($a, $b)')}。',
+    stem:
+        '先分解再求公约数：${_m('$a = $fa')}，${_m('$b = $fb')}。求 ${_m('\\gcd($a, $b)')}。',
     answer: '$g',
-    answerHint: '正整数',
-    hints: [
-      '对每个质数取两边指数的最小值。',
-      '再把这些质数幂乘起来。',
-    ],
+    hints: ['对每个质数取两边指数的最小值。', '再把这些质数幂乘起来。'],
     steps: ['${_m('\\gcd($a, $b) = $g = $fg')}。'],
     nodeRefs: ['gcd', 'fta'],
   );
@@ -666,11 +690,7 @@ GeneratedQuestion _lcmValue(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '求 ${_m('\\mathrm{lcm}($a, $b)')}。',
     answer: '$ans',
-    answerHint: '正整数',
-    hints: [
-      '可用 ${_m(r'\mathrm{lcm}(a,b)=ab/\gcd(a,b)')}。',
-      '或对每个质数取指数最大值。',
-    ],
+    hints: ['可用 ${_m(r'\mathrm{lcm}(a,b)=ab/\gcd(a,b)')}。', '或对每个质数取指数最大值。'],
     steps: [
       '${_m('\\gcd($a, $b) = $gcd')}。',
       '${_m('\\mathrm{lcm}($a, $b) = $a \\times $b / $gcd = $ans')}。',
@@ -696,12 +716,9 @@ GeneratedQuestion _lcmIdentity(int seed, Difficulty d) {
         ? '已知 ${_m(a)}、${_m(b)} 且 ${_m('\\mathrm{lcm}($a, $b) = $l')}。求 ${_m('\\gcd($a, $b)')}。'
         : '已知 ${_m('\\gcd($a, $b) = $g')}。求 ${_m('\\mathrm{lcm}($a, $b)')}。',
     answer: askGcd ? '$g' : '$l',
-    answerHint: '正整数',
     hints: [
       '恒等式：${_m(r'\gcd(a,b)\cdot\mathrm{lcm}(a,b)=ab')}（正整数）。',
-      askGcd
-          ? '因此 gcd = ab / lcm。'
-          : '因此 lcm = ab / gcd。',
+      askGcd ? '因此 gcd = ab / lcm。' : '因此 lcm = ab / gcd。',
     ],
     steps: [
       '${_m('$a \\times $b = ${a * b}')}。',
@@ -739,14 +756,8 @@ GeneratedQuestion _coprimeJudge(int seed, Difficulty d) {
     kind: QuestionKind.judge,
     stem: '判断：${_m(a)} 与 ${_m(b)} 是否互质？回答「是」或「否」。',
     answer: yes ? '是' : '否',
-    answerHint: '是 / 否',
-    hints: [
-      '互质指 ${_m(r'\gcd(a,b)=1')}，不必都是质数。',
-      '先算最大公约数。',
-    ],
-    steps: [
-      '${_m('\\gcd($a, $b) = $g')}，故${yes ? '互质' : '不互质'}。',
-    ],
+    hints: ['互质指 ${_m(r'\gcd(a,b)=1')}，不必都是质数。', '先算最大公约数。'],
+    steps: ['${_m('\\gcd($a, $b) = $g')}，故${yes ? '互质' : '不互质'}。'],
     nodeRefs: ['coprime', 'gcd'],
   );
 }
@@ -766,15 +777,11 @@ GeneratedQuestion _coprimeCount(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '在 1, 2, …, ${_m(n)} 中，有多少个数与 ${_m(n)} 互质？',
     answer: '${list.length}',
-    answerHint: '正整数',
     hints: [
       '即欧拉函数 ${_m('\\varphi($n)')} 的定义（可枚举）。',
       '对每个 k 检查它与 ${_m(n)} 是否互质。',
     ],
-    steps: [
-      '与 ${_m(n)} 互质的是：${list.join(', ')}。',
-      '共 ${_m(list.length)} 个。',
-    ],
+    steps: ['与 ${_m(n)} 互质的是：${list.join(', ')}。', '共 ${_m(list.length)} 个。'],
     nodeRefs: ['coprime'],
   );
 }
@@ -793,7 +800,6 @@ GeneratedQuestion _commonMultiple(int seed, Difficulty d) {
     kind: QuestionKind.judge,
     stem: '已知 ${_m('$a\\mid $b')}。判断：${_m(a)} 是否整除 ${_m(c)}？回答「是」或「否」。',
     answer: yes ? '是' : '否',
-    answerHint: '是 / 否',
     hints: [
       '整除有传递性，但不能由 a 整除 b 推出 a 整除任意与 b 接近的数。',
       '直接检查 ${_m('$c \\bmod $a')}。',
@@ -818,12 +824,63 @@ GeneratedQuestion _nextPrime(int seed, Difficulty d) {
     kind: QuestionKind.fill,
     stem: '求比 ${_m(n)} 大的最小质数。',
     answer: '$p',
-    answerHint: '质数',
-    hints: [
-      '从 ${_m(n + 1)} 起逐个检验素性。',
-      '偶数（大于 2）直接跳过。',
-    ],
+    hints: ['从 ${_m(n + 1)} 起逐个检验素性。', '偶数（大于 2）直接跳过。'],
     steps: ['下一个质数是 ${_m(p)}。'],
     nodeRefs: ['primes_composites'],
+  );
+}
+
+GeneratedQuestion _gcdThree(int seed, Difficulty d) {
+  final rng = Random(seed);
+  final g = _rand(rng, 2, d == Difficulty.contest ? 8 : 5);
+  var x = _rand(rng, 2, 8);
+  var y = _rand(rng, 2, 8);
+  var z = _rand(rng, 2, 8);
+  while (NumberTheory.gcd(NumberTheory.gcd(x, y), z) != 1) {
+    z = _rand(rng, 2, 9);
+  }
+  final a = g * x;
+  final b = g * y;
+  final c = g * z;
+  final ans = NumberTheory.gcd(NumberTheory.gcd(a, b), c);
+  return _q(
+    templateId: 'gcd.three',
+    seed: seed,
+    nodeId: 'gcd',
+    difficulty: d,
+    kind: QuestionKind.fill,
+    stem: '求 ${_m('\\gcd($a, $b, $c)')}。',
+    answer: '$ans',
+    hints: [
+      '先算其中两个的最大公约数，再与第三个数求一次。',
+      '${_m('\\gcd(a,b,c)=\\gcd(\\gcd(a,b),c)')}。',
+    ],
+    steps: [
+      '${_m('\\gcd($a, $b) = ${NumberTheory.gcd(a, b)}')}。',
+      '再与 ${_m(c)} 求公约数，得 ${_m(ans)}。',
+    ],
+    nodeRefs: ['gcd'],
+  );
+}
+
+GeneratedQuestion _distinctPrimes(int seed, Difficulty d) {
+  final rng = Random(seed);
+  final n = d == Difficulty.medium
+      ? [60, 84, 90, 120, 180][rng.nextInt(5)]
+      : [12, 18, 20, 30, 42, 45][rng.nextInt(6)];
+  final factors = NumberTheory.factorize(n);
+  final ans = factors.length;
+  final formatted = NumberTheory.formatFactorization(factors);
+  return _q(
+    templateId: 'fta.omega',
+    seed: seed,
+    nodeId: 'fta',
+    difficulty: d,
+    kind: QuestionKind.fill,
+    stem: '求 ${_m(n)} 的不同质因数的个数。',
+    answer: '$ans',
+    hints: ['先做质因数分解，再数有几个不同的质数。', '不要把指数加进个数里。'],
+    steps: ['${_m('$n = $formatted')}，不同质因数 ${_m(ans)} 个。'],
+    nodeRefs: ['fta'],
   );
 }

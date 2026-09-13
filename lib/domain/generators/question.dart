@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import '../figure.dart';
 import '../number_theory.dart';
 
 enum Difficulty {
@@ -46,7 +47,8 @@ class GeneratedQuestion {
     required this.steps,
     required this.nodeRefs,
     this.choices = const [],
-    this.answerHint = '',
+    this.figure,
+    this.answerRange,
   });
 
   final String templateId;
@@ -60,7 +62,12 @@ class GeneratedQuestion {
   final List<String> steps;
   final List<String> nodeRefs;
   final List<String> choices;
-  final String answerHint;
+  final MathFigure? figure;
+
+  /// The interval the answer has to live in — a residue mod m is in `0..m-1`,
+  /// a single digit in `0..9`. Options outside it are eliminable without
+  /// doing the mathematics, so the choice bank stays inside.
+  final ({int min, int max})? answerRange;
 
   bool check(String user) {
     if (kind == QuestionKind.choice) {
@@ -71,8 +78,10 @@ class GeneratedQuestion {
   }
 }
 
-typedef QuestionBuilder =
-    GeneratedQuestion Function(int seed, Difficulty difficulty);
+typedef QuestionBuilder = GeneratedQuestion Function(
+  int seed,
+  Difficulty difficulty,
+);
 
 class QuestionTemplate {
   const QuestionTemplate({
@@ -116,32 +125,93 @@ class QuestionEngine {
     required Difficulty difficulty,
     required Random rng,
   }) {
-    var pool = forNode(nodeId, difficulty: difficulty);
-    if (pool.isEmpty) {
-      pool = forNode(nodeId);
-    }
-    if (pool.isEmpty) {
-      throw StateError('no templates for $nodeId');
-    }
+    final pool = _poolFor(nodeId, difficulty);
     final template = pool[rng.nextInt(pool.length)];
-    final seed = rng.nextInt(1 << 30);
-    return template.build(seed, difficulty);
+    return template.build(rng.nextInt(1 << 30), difficulty);
   }
 
+  /// One practice run on a node, one difficulty per slot.
+  ///
+  /// A node usually carries two templates, so drawing each slot on its own
+  /// asks the same question twice in a five-question run more often than not.
+  /// Each slot therefore prefers a template the run has not used yet, and
+  /// redraws while the stem repeats one already on the paper. Nodes with
+  /// fewer distinct questions than the run is long still repeat — see
+  /// `test/variety_test.dart`, which holds every node to a full challenge.
+  List<GeneratedQuestion> runForNode({
+    required String nodeId,
+    required List<Difficulty> ladder,
+    required Random rng,
+  }) {
+    final out = <GeneratedQuestion>[];
+    final stems = <String>{};
+    for (final difficulty in ladder) {
+      final pool = _poolFor(nodeId, difficulty);
+      final used = {for (final q in out) q.templateId};
+      final unused = pool.where((t) => !used.contains(t.id)).toList();
+      GeneratedQuestion? pick;
+      for (final from in [if (unused.isNotEmpty) unused, pool]) {
+        for (var i = 0; i < _redraws && pick == null; i++) {
+          final q = from[rng.nextInt(from.length)].build(
+            rng.nextInt(1 << 30),
+            difficulty,
+          );
+          if (!stems.contains(q.stem)) pick = q;
+        }
+        if (pick != null) break;
+      }
+      pick ??= pool[rng.nextInt(pool.length)].build(
+        rng.nextInt(1 << 30),
+        difficulty,
+      );
+      stems.add(pick.stem);
+      out.add(pick);
+    }
+    return out;
+  }
+
+  /// Basic all the way, one medium to close: passing means the node holds up.
   List<GeneratedQuestion> challengeSet({
     required String nodeId,
     required int count,
     required Random rng,
   }) {
-    final questions = <GeneratedQuestion>[];
-    for (var i = 0; i < count; i++) {
-      final d = i < count - 1 ? Difficulty.basic : Difficulty.medium;
-      questions.add(
-        randomForNode(nodeId: nodeId, difficulty: d, rng: rng),
-      );
-    }
-    return questions;
+    return runForNode(
+      nodeId: nodeId,
+      rng: rng,
+      ladder: [
+        for (var i = 0; i < count; i++)
+          i < count - 1 ? Difficulty.basic : Difficulty.medium,
+      ],
+    );
   }
+
+  /// A drill: one difficulty, no pass mark.
+  List<GeneratedQuestion> drillSet({
+    required String nodeId,
+    required int count,
+    required Difficulty difficulty,
+    required Random rng,
+  }) {
+    return runForNode(
+      nodeId: nodeId,
+      rng: rng,
+      ladder: List.filled(count, difficulty),
+    );
+  }
+
+  /// Templates for the difficulty, or every template on the node when it has
+  /// none at that difficulty.
+  List<QuestionTemplate> _poolFor(String nodeId, Difficulty difficulty) {
+    final pool = forNode(nodeId, difficulty: difficulty);
+    if (pool.isNotEmpty) return pool;
+    final all = forNode(nodeId);
+    if (all.isEmpty) throw StateError('no templates for $nodeId');
+    return all;
+  }
+
+  /// Draws per slot before a repeated stem is accepted.
+  static const _redraws = 24;
 
   static Difficulty tDifficultiesPrefer(Set<Difficulty> set) {
     if (set.contains(Difficulty.basic)) return Difficulty.basic;

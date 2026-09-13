@@ -2,16 +2,47 @@ import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matholym/domain/generators/catalog.dart';
+import 'package:matholym/domain/generators/choices.dart';
+import 'package:matholym/domain/generators/question.dart';
+import 'package:matholym/domain/geometry.dart';
 import 'package:matholym/domain/knowledge/graph.dart';
 import 'package:matholym/domain/mastery.dart';
 
 void main() {
-  test('each L1–L3 node has at least two templates', () {
-    final ready = knowledgeGraph.nodes.where((n) => n.practiceReady);
-    for (final node in ready) {
-      final pool = questionEngine.forNode(node.id);
-      expect(pool.length, greaterThanOrEqualTo(2), reason: node.id);
+  test('each practice-ready node has at least two templates', () {
+    for (final graph in [
+      knowledgeGraph,
+      calculationGraph,
+      algebraGraph,
+      combinatoricsGraph,
+      geometryGraph,
+      logicGraph,
+    ]) {
+      for (final node in graph.nodes.where((n) => n.practiceReady)) {
+        final pool = questionEngine.forNode(node.id);
+        expect(pool.length, greaterThanOrEqualTo(2), reason: node.id);
+      }
     }
+  });
+
+  test('no template rounds an answer or breaks a helper precondition', () {
+    // The domain helpers assert that their divisions come out exact, so a
+    // generator that draws numbers giving 11.11% or 2.4 days throws here
+    // rather than shipping a rounded answer as the key. Asserts are on under
+    // `flutter test`, which is what makes this sweep worth running.
+    final broken = <String>[];
+    for (final template in questionTemplates) {
+      for (final d in template.difficulties) {
+        for (var seed = 1; seed <= 150; seed++) {
+          try {
+            template.build(seed, d);
+          } catch (e) {
+            broken.add('${template.id} ${d.name} seed=$seed :: $e');
+          }
+        }
+      }
+    }
+    expect(broken, isEmpty);
   });
 
   test('same seed reproduces the same question', () {
@@ -76,5 +107,20 @@ void main() {
     );
     expect(set, hasLength(5));
     expect(set.every((q) => q.nodeId == 'gcd'), isTrue);
+  });
+
+  test('frame area subtracts the border on both sides', () {
+    expect(Geometry.cutSquare(12, 8), 80);
+    for (var seed = 1; seed <= 40; seed++) {
+      final q = questionEngine.generate(
+        templateId: 'cut.frame',
+        seed: seed,
+        difficulty: Difficulty.basic,
+      );
+      final opts = QuestionOptions.of(q);
+      expect(opts, contains(q.answer), reason: 'seed $seed');
+      expect(opts.toSet(), hasLength(4), reason: 'seed $seed $opts');
+      expect(q.stem.contains('内边长'), isFalse, reason: 'seed $seed');
+    }
   });
 }

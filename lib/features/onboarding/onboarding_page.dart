@@ -67,10 +67,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   const SizedBox(height: AppSpace.md),
                   const Text(Brand.appName, style: AppType.display),
                   const SizedBox(height: AppSpace.sm),
-                  Text(
-                    KnowledgeArea.planned.map((a) => a.title).join('  ·  '),
-                    style: AppType.mark,
-                  ),
+                  const Text('竞赛数学知识林', style: AppType.meta),
                   const SizedBox(height: AppSpace.xl),
                   TextField(
                     controller: _name,
@@ -82,7 +79,13 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                   ),
                   if (_error != null) ...[
                     const SizedBox(height: AppSpace.sm),
-                    Text(_error!, style: const TextStyle(color: AppColors.danger, height: 1.5)),
+                    Text(
+                      _error!,
+                      style: const TextStyle(
+                        color: AppColors.danger,
+                        height: 1.5,
+                      ),
+                    ),
                   ],
                   const SizedBox(height: AppSpace.lg),
                   FilledButton(

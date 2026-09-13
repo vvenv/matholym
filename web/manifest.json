@@ -5,7 +5,7 @@
     "display": "standalone",
     "background_color": "#0B0F14",
     "theme_color": "#0B0F14",
-    "description": "竞赛数学知识林：数论、代数、组合、几何。",
+    "description": "竞赛数学知识林：计算、代数、几何、数论、组合、逻辑。",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
