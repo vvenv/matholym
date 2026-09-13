@@ -148,79 +148,340 @@
   },
   "congruence_def": {
     "nodeId": "congruence_def",
-    "definition": "若 $m \\mid (a-b)$，则称 $a$ 与 $b$ 模 $m$ 同余，记 $a \\equiv b \\pmod{m}$。本期练习尚未开放。",
-    "theorems": ["同余是等价关系。"],
-    "examples": ["$17 \\equiv 5 \\pmod{12}$。"],
-    "commonMistakes": ["把模数写成被减数。"]
+    "definition": "设 $m$ 为正整数。若 $m \\mid (a-b)$，则称 $a$ 与 $b$ 模 $m$ 同余，记 $a \\equiv b \\pmod{m}$。等价于 $a$ 与 $b$ 除以 $m$ 的余数相同。",
+    "theorems": [
+      "同余是等价关系：自反、对称、传递。",
+      "每个整数都与它的最小非负剩余 $0,1,\\ldots,m-1$ 之一同余。"
+    ],
+    "examples": [
+      "$17 \\equiv 5 \\pmod{12}$，因为 $17-5=12$。",
+      "$-7 \\equiv 2 \\pmod{3}$：余数取 $0 \\le r < 3$，不取负数。"
+    ],
+    "commonMistakes": [
+      "把「$a$ 模 $m$」和「$m$ 模 $a$」写反。",
+      "负数为被除数时把余数写成负数。"
+    ]
   },
   "congruence_ops": {
     "nodeId": "congruence_ops",
-    "definition": "同余式可以两边同时加、减、乘同一个整数。除法需要额外条件。本期练习尚未开放。",
-    "theorems": ["若 $a\\equiv b$，$c\\equiv d \\pmod{m}$，则 $a\\pm c\\equiv b\\pm d$，$ac\\equiv bd \\pmod{m}$。"],
-    "examples": ["$7\\equiv 1 \\pmod{6} \\Rightarrow 7^2\\equiv 1 \\pmod{6}$。"],
-    "commonMistakes": ["任意约去公因数而不同时约模数。"]
+    "definition": "同余式可以两边同时加、减、乘同一个整数。除法不行：约去公因数时，模数通常要同时除以 $\\gcd(d,m)$。",
+    "theorems": [
+      "若 $a\\equiv b$、$c\\equiv d \\pmod{m}$，则 $a\\pm c\\equiv b\\pm d$，$ac\\equiv bd \\pmod{m}$。",
+      "若 $da \\equiv db \\pmod{m}$ 且 $\\gcd(d,m)=1$，则 $a \\equiv b \\pmod{m}$。"
+    ],
+    "examples": [
+      "$7\\equiv 1 \\pmod{6}$，故 $7^2 \\equiv 1 \\pmod{6}$。",
+      "$6 \\equiv 2 \\pmod{4}$，两边除以 $2$ 得不到 $3 \\equiv 1 \\pmod{4}$。"
+    ],
+    "commonMistakes": [
+      "任意约去公因数，却不同时缩小模数。",
+      "以为同余式可以像等式一样随便两边开方。"
+    ]
   },
   "complete_residue": {
     "nodeId": "complete_residue",
-    "definition": "模 $m$ 的完全剩余系是 $m$ 个两两不同余的整数，恰好覆盖所有余数。本期练习尚未开放。",
-    "theorems": ["$0,1,\\ldots,m-1$ 是最常用的完全剩余系。"],
-    "examples": ["模 $5$ 可用 $\\{0,1,2,3,4\\}$ 或 $\\{5,6,7,8,9\\}$。"],
-    "commonMistakes": ["剩余系里出现两个同余的数。"]
+    "definition": "模 $m$ 的完全剩余系是 $m$ 个两两不同余的整数，恰好覆盖每一个剩余类。最常用的是 $\\{0,1,\\ldots,m-1\\}$。",
+    "theorems": [
+      "任一完全剩余系里，每个余数恰好出现一次。",
+      "若 $\\gcd(a,m)=1$，把完全剩余系各项乘 $a$ 再加 $b$，仍是完全剩余系。"
+    ],
+    "examples": [
+      "模 $5$ 可用 $\\{0,1,2,3,4\\}$，也可用 $\\{5,6,7,8,9\\}$。",
+      "$17$ 在模 $5$ 的标准剩余系里的代表元是 $2$。"
+    ],
+    "commonMistakes": [
+      "剩余系里出现两个同余的数，或漏掉某个类。",
+      "把缩剩余系（只要与 $m$ 互质的）和完全剩余系混为一谈。"
+    ]
   },
   "bezout": {
     "nodeId": "bezout",
-    "definition": "裴蜀定理：存在整数 $x,y$ 使 $ax+by=\\gcd(a,b)$。本期练习尚未开放。",
-    "theorems": ["$ax+by=c$ 有解当且仅当 $\\gcd(a,b) \\mid c$。"],
-    "examples": ["$3x+5y=1$ 有解，因为 $\\gcd(3,5)=1$。"],
-    "commonMistakes": ["以为只有 $\\gcd=1$ 时裴蜀才成立。"]
+    "definition": "裴蜀定理：对任意整数 $a,b$，存在整数 $x,y$ 使 $ax+by=\\gcd(a,b)$。更一般地，$ax+by=c$ 有整数解当且仅当 $\\gcd(a,b)\\mid c$。",
+    "theorems": [
+      "$\\gcd(a,b)$ 是 $a,b$ 的整系数线性组合里能取到的最小正整数。",
+      "一组特解可由欧几里得算法倒代得到；通解再加减 $b/d$ 与 $a/d$。"
+    ],
+    "examples": [
+      "$3x+5y=1$ 有解，因为 $\\gcd(3,5)=1$，一组解是 $x=2,\\, y=-1$。",
+      "$6x+9y=5$ 无解，因为 $3$ 不整除 $5$。"
+    ],
+    "commonMistakes": [
+      "以为只有 $\\gcd=1$ 时裴蜀才成立。",
+      "求出一组解就以为没有其他解。"
+    ]
   },
   "fermat": {
     "nodeId": "fermat",
-    "definition": "费马小定理：$p$ 为质数且 $p \\nmid a$ 时，$a^{p-1} \\equiv 1 \\pmod{p}$。本期练习尚未开放。",
-    "theorems": ["也常写成 $a^p \\equiv a \\pmod{p}$。"],
-    "examples": ["$3^4 \\equiv 1 \\pmod{5}$。"],
-    "commonMistakes": ["把定理用在合数模上。"]
+    "definition": "费马小定理：若 $p$ 为质数且 $p \\nmid a$，则 $a^{p-1} \\equiv 1 \\pmod{p}$。也常写成对任意整数 $a$ 都有 $a^p \\equiv a \\pmod{p}$。",
+    "theorems": [
+      "用它降指数：把指数除以 $p-1$ 取余（在 $p \\nmid a$ 时）。",
+      "合数模一般不成立，例如 $2^{4} \\not\\equiv 2 \\pmod{4}$。"
+    ],
+    "examples": [
+      "$3^4 \\equiv 1 \\pmod{5}$，因而 $3^{9} = 3^{8}\\cdot 3 \\equiv 3 \\pmod{5}$。",
+      "$10^7 \\equiv 10 \\equiv 3 \\pmod{7}$。"
+    ],
+    "commonMistakes": [
+      "把定理用在合数模上。",
+      "$p \\mid a$ 时仍去算 $a^{p-1} \\equiv 1$。"
+    ]
   },
   "wilson": {
     "nodeId": "wilson",
-    "definition": "威尔逊定理：$p$ 为质数当且仅当 $(p-1)! \\equiv -1 \\pmod{p}$。本期练习尚未开放。",
-    "theorems": ["常用于素性刻画与阶乘剩余。"],
-    "examples": ["$4! = 24 \\equiv -1 \\pmod{5}$。"],
-    "commonMistakes": ["直接计算大阶乘而不化同余。"]
+    "definition": "威尔逊定理：$p$ 为质数当且仅当 $(p-1)! \\equiv -1 \\pmod{p}$（$p>1$）。它给出阶乘在质数模下的剩余，也是素性的一个刻画。",
+    "theorems": [
+      "$(p-1)! \\equiv -1 \\equiv p-1 \\pmod{p}$。",
+      "证明时常把 $2,3,\\ldots,p-2$ 配成互逆的对。"
+    ],
+    "examples": [
+      "$4! = 24 \\equiv -1 \\pmod{5}$。",
+      "$4$ 是合数，$3! = 6 \\equiv 2 \\not\\equiv -1 \\pmod{4}$。"
+    ],
+    "commonMistakes": [
+      "直接硬算大阶乘，而不化成 $-1$。",
+      "把定理用成 $(p)! \\equiv -1$。"
+    ]
   },
   "euler": {
     "nodeId": "euler",
-    "definition": "欧拉定理：若 $\\gcd(a,n)=1$，则 $a^{\\varphi(n)} \\equiv 1 \\pmod{n}$。本期练习尚未开放。",
-    "theorems": ["费马小定理是 $n$ 为质数的特例。"],
-    "examples": ["$\\varphi(8)=4$，$3^4 \\equiv 1 \\pmod{8}$。"],
-    "commonMistakes": ["在不互质时套用欧拉定理。"]
+    "definition": "欧拉函数 $\\varphi(n)$ 是 $1$ 到 $n$ 中与 $n$ 互质的个数。欧拉定理：若 $\\gcd(a,n)=1$，则 $a^{\\varphi(n)} \\equiv 1 \\pmod{n}$。",
+    "theorems": [
+      "若 $n=\\prod p^e$，则 $\\varphi(n)=n\\prod_{p\\mid n}(1-1/p)$。",
+      "费马小定理是 $n$ 为质数时的特例：$\\varphi(p)=p-1$。"
+    ],
+    "examples": [
+      "$\\varphi(8)=4$，$3^4 \\equiv 1 \\pmod{8}$。",
+      "$\\varphi(15)=8$，因为 $1$ 到 $15$ 中与 $15$ 互质的有 $8$ 个。"
+    ],
+    "commonMistakes": [
+      "在 $\\gcd(a,n)>1$ 时套用欧拉定理。",
+      "把 $\\varphi(n)$ 当成 $n-1$。"
+    ]
   },
   "crt": {
     "nodeId": "crt",
-    "definition": "中国剩余定理：模数两两互质时，一次同余方程组有模 $M=\\prod m_i$ 的唯一解。本期练习尚未开放。",
-    "theorems": ["构造解：$x = \\sum a_i M_i y_i$，其中 $M_i=M/m_i$，$M_i y_i \\equiv 1 \\pmod{m_i}$。"],
-    "examples": ["$x\\equiv 2 \\pmod{3}$，$x\\equiv 3 \\pmod{5}$ 的解是 $x\\equiv 8 \\pmod{15}$。"],
-    "commonMistakes": ["模数不互质时仍按标准 CRT 套公式。"]
+    "definition": "中国剩余定理：模数两两互质时，一次同余方程组在模 $M=\\prod m_i$ 下有唯一解。构造：$x=\\sum a_i M_i y_i$，其中 $M_i=M/m_i$，$M_i y_i \\equiv 1 \\pmod{m_i}$。",
+    "theorems": [
+      "两个方程 $x\\equiv a \\pmod{m}$，$x\\equiv b \\pmod{n}$ 在 $\\gcd(m,n)=1$ 时模 $mn$ 唯一可解。",
+      "模数不互质时，有解当且仅当 $a-b$ 能被 $\\gcd(m,n)$ 整除。"
+    ],
+    "examples": [
+      "$x\\equiv 2 \\pmod{3}$，$x\\equiv 3 \\pmod{5}$ 的解是 $x\\equiv 8 \\pmod{15}$。",
+      "$M=15$，$M_1=5$，$M_2=3$，再分别求逆元。"
+    ],
+    "commonMistakes": [
+      "模数不互质时仍按标准公式硬套。",
+      "求出一个特解后忘记写成模 $M$ 的剩余类。"
+    ]
   },
   "gauss_floor": {
     "nodeId": "gauss_floor",
-    "definition": "高斯函数 $\\lfloor x \\rfloor$ 表示不超过 $x$ 的最大整数。本期练习尚未开放。",
-    "theorems": ["$n = \\lfloor n/m \\rfloor \\cdot m + r$，与带余除法一致。"],
-    "examples": ["$\\lfloor 17/5 \\rfloor = 3$。"],
-    "commonMistakes": ["对负数取整方向搞反。"]
+    "definition": "高斯函数 $\\lfloor x \\rfloor$ 表示不超过 $x$ 的最大整数。对正整数 $n,m$ 有 $n = \\lfloor n/m \\rfloor \\cdot m + r$，与带余除法一致。",
+    "theorems": [
+      "$1$ 到 $n$ 中 $m$ 的倍数恰有 $\\lfloor n/m \\rfloor$ 个。",
+      "对负数：$\\lfloor -7/3 \\rfloor = -3$，是向小的方向取整，不是截断。"
+    ],
+    "examples": [
+      "$\\lfloor 17/5 \\rfloor = 3$。",
+      "$1$ 到 $20$ 中 $3$ 的倍数有 $\\lfloor 20/3 \\rfloor = 6$ 个。"
+    ],
+    "commonMistakes": [
+      "对负数按「去掉小数」来取整。",
+      "把 $\\lfloor n/m \\rfloor$ 和四舍五入搞混。"
+    ]
   },
   "diophantine": {
     "nodeId": "diophantine",
-    "definition": "不定方程研究整数解。线性情形由裴蜀定理完全刻画。本期练习尚未开放。",
-    "theorems": ["特解加上齐次通解得到全部解。"],
-    "examples": ["$3x+5y=1$ 的一组解是 $x=2,\\, y=-1$。"],
-    "commonMistakes": ["求出一组解就以为是唯一解。"]
+    "definition": "不定方程研究整数解。二元线性方程 $ax+by=c$ 由裴蜀定理完全刻画：有解当且仅当 $\\gcd(a,b)\\mid c$。通解是特解加上齐次解。",
+    "theorems": [
+      "若 $(x_0,y_0)$ 是一组解，$d=\\gcd(a,b)$，则通解为 $x=x_0+(b/d)t$，$y=y_0-(a/d)t$。",
+      "正整数解对应使 $x>0,\\, y>0$ 的那些整数 $t$。"
+    ],
+    "examples": [
+      "$3x+5y=1$ 的一组解是 $x=2,\\, y=-1$。",
+      "$3x+5y=30$ 的正整数解只有 $(5,3)$。"
+    ],
+    "commonMistakes": [
+      "求出一组解就以为是唯一解。",
+      "数正整数解时把 $x=0$ 或 $y=0$ 也算进去。"
+    ]
   },
   "base_binomial": {
     "nodeId": "base_binomial",
-    "definition": "进位制改写与组合数整除（Kummer、Lucas）是竞赛常见综合点。本期练习尚未开放。",
-    "theorems": ["$n!$ 中质数 $p$ 的指数是 $\\lfloor n/p \\rfloor + \\lfloor n/p^2 \\rfloor + \\cdots$。"],
-    "examples": ["$100!$ 中因子 $5$ 的个数是 $24$。"],
-    "commonMistakes": ["只算 $\\lfloor n/p \\rfloor$ 而忘记更高幂次。"]
+    "definition": "进位制把整数按 $b$ 的方幂展开。$n!$ 的质因数指数由勒让德公式给出，它也是 Kummer、Lucas 讨论组合数整除的起点。",
+    "theorems": [
+      "$n!$ 中质数 $p$ 的指数是 $\\lfloor n/p \\rfloor + \\lfloor n/p^2 \\rfloor + \\cdots$。",
+      "把十进制数反复除以 $b$，余数从低位到高位，倒序即 $b$ 进制数字。"
+    ],
+    "examples": [
+      "$100!$ 中因子 $5$ 的个数是 $24$。",
+      "$13$ 的二进制是 $1101$。"
+    ],
+    "commonMistakes": [
+      "只算 $\\lfloor n/p \\rfloor$ 而忘记更高幂次。",
+      "余数倒序时把最高位丢掉。"
+    ]
+  },
+  "perfect_square": {
+    "nodeId": "perfect_square",
+    "definition": "完全平方数是某个整数的平方。1 到 $n$ 中有 $\\lfloor\\sqrt{n}\\rfloor$ 个正完全平方。",
+    "theorems": [
+      "平方数的质因数指数都是偶数。",
+      "相邻平方差是连续奇数：$ (k+1)^2-k^2=2k+1$。"
+    ],
+    "examples": [
+      "$49=7^2$ 是完全平方，$50$ 不是。",
+      "1 到 $20$ 有 $1,4,9,16$ 共 $4$ 个。"
+    ],
+    "commonMistakes": [
+      "把 $1$ 排除在完全平方之外。",
+      "只试到 $n/2$ 而不是 $\\sqrt{n}$。"
+    ]
+  },
+  "square_end": {
+    "nodeId": "square_end",
+    "definition": "个位数字平方后，个位只能是 $0,1,4,5,6,9$。因此个位是 $2,3,7,8$ 的数一定不是完全平方。",
+    "theorems": [
+      "$0^2$ 与 $5^2$ 个位 $0$、$5$；$1$ 与 $9$ 个位 $1$；$2$ 与 $8$ 个位 $4$；$3$ 与 $7$ 个位 $9$；$4$ 与 $6$ 个位 $6$。"
+    ],
+    "examples": [
+      "$17$ 个位 $7$，不可能是平方数。",
+      "$36$ 个位 $6$，仍需再检验。"
+    ],
+    "commonMistakes": [
+      "以为个位合法就一定是平方数。",
+      "漏掉个位可以是 $5$ 或 $6$。"
+    ]
+  },
+  "power_last": {
+    "nodeId": "power_last",
+    "definition": "求 $a^n$ 的个位，只需看 $a$ 的个位的幂次循环节。常见：$2$ 的循环是 $2,4,8,6$，长度 $4$。",
+    "theorems": [
+      "个位循环节整除指数时，落到循环的最后一位。",
+      "等价于模 $10$ 的幂运算。"
+    ],
+    "examples": [
+      "$2^{10}$ 个位是 $4$（第 $2$ 位循环）。",
+      "$7^5$ 个位是 $7$。"
+    ],
+    "commonMistakes": [
+      "循环节数错，从 $n$ 而不是 $n\\bmod$ 周期去取。",
+      "余数为 $0$ 时取了循环第 $0$ 项而不是最后一项。"
+    ]
+  },
+  "count_mult": {
+    "nodeId": "count_mult",
+    "definition": "$1$ 到 $n$ 中 $d$ 的倍数有 $\\lfloor n/d\\rfloor$ 个。区间 $[a,b]$ 用 $\\lfloor b/d\\rfloor-\\lfloor(a-1)/d\\rfloor$。",
+    "theorems": [
+      "个数只看不超过 $n$ 的最大倍数。"
+    ],
+    "examples": [
+      "$1$ 到 $100$ 中 $7$ 的倍数有 $14$ 个。"
+    ],
+    "commonMistakes": [
+      "区间忘记减 $\\lfloor(a-1)/d\\rfloor$。",
+      "端点该不该算没看清。"
+    ]
+  },
+  "digit_root": {
+    "nodeId": "digit_root",
+    "definition": "数根是反复求各位数字和直到一位。$n>0$ 时数根为 $1+(n-1)\\bmod 9$，也等于 $n\\bmod 9$（$9$ 的倍数为 $9$）。",
+    "theorems": [
+      "数根与被 $9$ 整除的特征一致。"
+    ],
+    "examples": [
+      "$38\\to 11\\to 2$。",
+      "$999$ 的数根是 $9$。"
+    ],
+    "commonMistakes": [
+      "$9$ 的倍数写成余数 $0$。",
+      "只加一次就停、但题要加到一位。"
+    ]
+  },
+  "divisor_sum": {
+    "nodeId": "divisor_sum",
+    "definition": "$\\sigma(n)$ 是 $n$ 的全部正因数之和。若 $n=p^a q^b$ 则 $\\sigma(n)=\\dfrac{p^{a+1}-1}{p-1}\\cdot\\dfrac{q^{b+1}-1}{q-1}$。",
+    "theorems": [
+      "真因数和是 $\\sigma(n)-n$。",
+      "完全数满足 $\\sigma(n)=2n$。"
+    ],
+    "examples": [
+      "$12$ 的因数和 $1+2+3+4+6+12=28$。"
+    ],
+    "commonMistakes": [
+      "漏掉 $1$ 或漏掉 $n$。",
+      "把因数个数当因数和。"
+    ]
+  },
+  "odd_div": {
+    "nodeId": "odd_div",
+    "definition": "奇数因数个数等于把 $n$ 的因子 $2$ 全部除掉后，剩下那个奇数的因数个数。",
+    "theorems": [
+      "最大奇数因数就是 $n$ 除掉全部 $2$。"
+    ],
+    "examples": [
+      "$12=2^2\\cdot 3$ 有奇数因数 $1,3$ 共 $2$ 个。"
+    ],
+    "commonMistakes": [
+      "没除尽 $2$。",
+      "把偶数因数也数进去。"
+    ]
+  },
+  "last_two": {
+    "nodeId": "last_two",
+    "definition": "幂的末两位是 $a^n \\bmod 100$。可对 $4$ 与 $25$ 分别用欧拉定理再拼，或直接看末两位循环节。",
+    "theorems": [
+      "与个位循环不同，末两位周期更长。"
+    ],
+    "examples": [
+      "$2^{10}=1024$，末两位 $24$。",
+      "$7^4=2401$，末两位 $1$。"
+    ],
+    "commonMistakes": [
+      "只算个位。",
+      "循环节长度用错。"
+    ]
+  },
+  "near_div": {
+    "nodeId": "near_div",
+    "definition": "比 $n$ 大的最小 $d$ 的倍数是 $n+(d-n\\bmod d)$。若 $d\\mid n$，答案是 $n+d$。",
+    "theorems": ["要加的数就是补到下一个整除的缺口。"],
+    "examples": ["比 $20$ 大的最小 $6$ 的倍数是 $24$。"],
+    "commonMistakes": ["已经整除时写成 $n$ 而不是 $n+d$。"]
+  },
+  "base_ops": {
+    "nodeId": "base_ops",
+    "definition": "$b$ 进制先按权化成十进制再加减。第 $k$ 位（从右、从 $0$ 计）权是 $b^k$。",
+    "theorems": ["二进制 $101=5$，$11=3$，和 $8$。"],
+    "examples": ["$2$ 进制 $110+11=6+3=9$（十进制）。"],
+    "commonMistakes": ["按十进制位相加却不进位到 $b$。"]
+  },
+  "cycle_len": {
+    "nodeId": "cycle_len",
+    "definition": "$1/n$ 的循环节长度：先除掉因子 $2,5$，剩下 $m=1$ 则有限（长度 $0$）；否则是 $10$ 模 $m$ 的阶。",
+    "theorems": ["$1/7$ 周期 $6$，$1/3$ 周期 $1$，$1/2$ 有限。"],
+    "examples": ["$1/11=0.\\overline{09}$，长度 $2$。"],
+    "commonMistakes": ["没先除掉 $2$ 和 $5$。"]
+  },
+  "base_mul": {
+    "nodeId": "base_mul",
+    "definition": "$b$ 进制乘法：先把各数按权化成十进制，再相乘。答案仍写成十进制，便于核对。",
+    "theorems": ["$b$ 进制里的 $10$ 就是 $b$ 本身。"],
+    "examples": ["$2$ 进制 $11\\times 10=3\\times 2=6$（十进制）。"],
+    "commonMistakes": ["按十进制直接乘，不先化十进制。"]
+  },
+  "repunit": {
+    "nodeId": "repunit",
+    "definition": "$R_n$ 是 $n$ 个 $1$ 连写的数，$R_n=(10^n-1)/9$。",
+    "theorems": ["数字和是 $n$，故 $3\\mid R_n$ 当且仅当 $3\\mid n$。"],
+    "examples": ["$R_3=111$，$111/3=37$。"],
+    "commonMistakes": ["把 $R_n$ 当成 $n$ 本身。"]
+  },
+  "fact_zero": {
+    "nodeId": "fact_zero",
+    "definition": "$n!$ 十进制末尾 $0$ 的个数等于因子 $5$ 的个数：$\\lfloor n/5\\rfloor+\\lfloor n/25\\rfloor+\\cdots$。",
+    "theorems": ["$2$ 比 $5$ 多，所以只数 $5$。"],
+    "examples": ["$25!=6$ 个尾零，因为 $5+1$。"],
+    "commonMistakes": ["只除一次 $5$，漏掉 $25,125$。"]
   }
 }

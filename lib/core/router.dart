@@ -8,7 +8,6 @@ import '../features/onboarding/onboarding_page.dart';
 import '../features/practice/practice_controller.dart';
 import '../features/practice/practice_page.dart';
 import '../features/shell/app_shell.dart';
-import '../features/tree/tree_page.dart';
 import '../features/wrongbook/wrongbook_page.dart';
 import '../providers.dart';
 
@@ -37,50 +36,41 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/onboarding',
         builder: (context, state) => const OnboardingPage(),
       ),
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return AppShell(navigationShell: navigationShell);
-        },
-        branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(path: '/', builder: (context, state) => const TreePage()),
-            ],
+      // Nested so `go` to any page keeps the tree underneath for back.
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const AppShell(),
+        routes: [
+          GoRoute(
+            path: 'wrongbook',
+            builder: (context, state) => const WrongBookPage(),
           ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/wrongbook',
-                builder: (context, state) => const WrongBookPage(),
-              ),
-            ],
+          GoRoute(
+            path: 'card/:nodeId',
+            builder: (context, state) => CardPage(
+              nodeId: state.pathParameters['nodeId']!,
+            ),
+          ),
+          GoRoute(
+            path: 'practice',
+            builder: (context, state) {
+              final params = state.uri.queryParameters;
+              final mode = PracticeMode.values.firstWhere(
+                (e) => e.name == params['mode'],
+                orElse: () => PracticeMode.special,
+              );
+              return PracticePage(
+                args: PracticeArgs(
+                  mode: mode,
+                  nodeId: params['nodeId'],
+                  difficulty: params['difficulty'] == null
+                      ? null
+                      : Difficulty.parse(params['difficulty']!),
+                ),
+              );
+            },
           ),
         ],
-      ),
-      GoRoute(
-        path: '/card/:nodeId',
-        builder: (context, state) => CardPage(
-          nodeId: state.pathParameters['nodeId']!,
-        ),
-      ),
-      GoRoute(
-        path: '/practice',
-        builder: (context, state) {
-          final params = state.uri.queryParameters;
-          final mode = PracticeMode.values.firstWhere(
-            (e) => e.name == params['mode'],
-            orElse: () => PracticeMode.special,
-          );
-          return PracticePage(
-            args: PracticeArgs(
-              mode: mode,
-              nodeId: params['nodeId'],
-              difficulty: params['difficulty'] == null
-                  ? null
-                  : Difficulty.parse(params['difficulty']!),
-            ),
-          );
-        },
       ),
     ],
   );

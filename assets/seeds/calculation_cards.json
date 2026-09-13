@@ -1,0 +1,414 @@
+{
+  "calc_addsub": {
+    "nodeId": "calc_addsub",
+    "definition": "加减巧算的核心是凑整：把加数或减数拆成靠近 $10$、$100$、$1000$ 的部分，先算整再补差。",
+    "theorems": [
+      "加法交换、结合不改变和。",
+      "$a-b=(a-c)-(b-c)$，两边同加同减一个数，差不变。"
+    ],
+    "examples": [
+      "$398+47=400+45=445$。",
+      "$1000-237=763$。"
+    ],
+    "commonMistakes": [
+      "凑整后忘了把多加或少减的部分补回来。",
+      "连续减法时符号弄反。"
+    ]
+  },
+  "calc_mul": {
+    "nodeId": "calc_mul",
+    "definition": "乘法巧算常借助 $4$、$8$、$25$、$125$ 与 $100$、$1000$ 的配套，或把接近整十、整百的因数拆开。",
+    "theorems": [
+      "$99n=100n-n$，$25\\times 4=100$，$125\\times 8=1000$。",
+      "一个因数扩大若干倍、另一个缩小相同倍数，积不变。"
+    ],
+    "examples": [
+      "$25\\times 16=25\\times 4\\times 4=100\\times 4=400$。",
+      "$99\\times 7=700-7=693$。"
+    ],
+    "commonMistakes": [
+      "拆因数时漏乘或多数一个 $10$。",
+      "$99n$ 做成 $100n+n$。"
+    ]
+  },
+  "calc_laws": {
+    "nodeId": "calc_laws",
+    "definition": "交换律、结合律、分配律让连加连乘可以换序、分组。能凑整的先算。",
+    "theorems": [
+      "$ab+ac=a(b+c)$。",
+      "$(ab)c=a(bc)$，可先把 $25$ 与 $4$、$8$ 与 $125$ 乘在一起。"
+    ],
+    "examples": [
+      "$25\\times 37+25\\times 63=25\\times 100=2500$。",
+      "$8\\times 125\\times 3=1000\\times 3=3000$。"
+    ],
+    "commonMistakes": [
+      "分配律只乘了一项。",
+      "把加法的结合误用到有减号的式子上。"
+    ]
+  },
+  "frac_ops": {
+    "nodeId": "frac_ops",
+    "definition": "分数加减先通分，乘除先约分再乘。结果要约成最简分数。",
+    "theorems": [
+      "$\\dfrac{a}{b}+\\dfrac{c}{d}=\\dfrac{ad+bc}{bd}$。",
+      "除以分数等于乘它的倒数。"
+    ],
+    "examples": [
+      "$\\dfrac{1}{2}+\\dfrac{1}{3}=\\dfrac{5}{6}$。",
+      "$\\dfrac{2}{3}\\times\\dfrac{9}{4}=\\dfrac{3}{2}$。"
+    ],
+    "commonMistakes": [
+      "加减时分子分母分别相加。",
+      "约分约错了公因数。"
+    ]
+  },
+  "frac_cmp": {
+    "nodeId": "frac_cmp",
+    "definition": "比较正分数可以通分，也可以交叉相乘：比较 $ad$ 与 $bc$ 就比较了 $a/b$ 与 $c/d$。",
+    "theorems": [
+      "分母相同看分子，分子相同分母大的反而小。",
+      "与 $1$ 比较：分子大于分母则大于 $1$。"
+    ],
+    "examples": [
+      "$\\dfrac{3}{4}>\\dfrac{2}{3}$，因为 $9>8$。",
+      "$\\dfrac{5}{6}$ 与 $\\dfrac{7}{8}$ 通分成 $20/24$ 与 $21/24$。"
+    ],
+    "commonMistakes": [
+      "交叉相乘时左右乘反了。",
+      "带负号时仍按正分数规则比。"
+    ]
+  },
+  "dec_rep": {
+    "nodeId": "dec_rep",
+    "definition": "纯循环小数可以写成分数：一位循环 $0.\\dot{a}=a/9$，两位 $0.\\overline{ab}=ab/99$，再约分。",
+    "theorems": [
+      "设 $x=0.\\dot{a}$，则 $10x=a.\\dot{a}$，$9x=a$。",
+      "循环节有几位，就乘 $10$ 的几次方再相减。"
+    ],
+    "examples": [
+      "$0.\\dot{3}=1/3$，$0.\\dot{6}=2/3$。",
+      "$0.\\overline{12}=12/99=4/33$。"
+    ],
+    "commonMistakes": [
+      "把 $0.\\dot{1}$ 当成 $1/10$。",
+      "两位循环误用除以 $9$。"
+    ]
+  },
+  "new_op": {
+    "nodeId": "new_op",
+    "definition": "新定义运算给出一个公式，如 $a\\oplus b=a+b+ab$。计算时直接代入；求逆运算时解方程。",
+    "theorems": [
+      "$a\\oplus b=(a+1)(b+1)-1$。",
+      "若 $a\\oplus x=c$，则 $x=(c-a)/(a+1)$（$a\\neq -1$）。"
+    ],
+    "examples": [
+      "$2\\oplus 3=2+3+6=11$。",
+      "$3\\oplus x=15$ 得 $x=3$。"
+    ],
+    "commonMistakes": [
+      "只做了加法或只做了乘法。",
+      "求逆时移项除错。"
+    ]
+  },
+  "split_unit": {
+    "nodeId": "split_unit",
+    "definition": "裂项把一项拆成两项之差，使中间项抵消。最常用 $\\dfrac{1}{k(k+1)}=\\dfrac{1}{k}-\\dfrac{1}{k+1}$。",
+    "theorems": [
+      "$\\sum_{k=a}^{b-1}\\dfrac{1}{k(k+1)}=\\dfrac{1}{a}-\\dfrac{1}{b}$。",
+      "类似地可裂 $\\dfrac{1}{k(k+2)}$ 等，系数要配平。"
+    ],
+    "examples": [
+      "$\\dfrac{1}{2\\cdot 3}+\\dfrac{1}{3\\cdot 4}+\\dfrac{1}{4\\cdot 5}=\\dfrac{1}{2}-\\dfrac{1}{5}=\\dfrac{3}{10}$。"
+    ],
+    "commonMistakes": [
+      "裂项后首尾找错，中间没消干净。",
+      "分母是 $k(k+2)$ 却按 $k(k+1)$ 裂。"
+    ]
+  },
+  "mean_avg": {
+    "nodeId": "mean_avg",
+    "definition": "平均数 $=$ 总和 $\\div$ 个数。已知平均数可以还原总和，再求缺的一项。",
+    "theorems": [
+      "$n$ 个数的平均是 $\\bar x$，则总和是 $n\\bar x$。",
+      "去掉或加入一个数后，用新总和除以新个数。"
+    ],
+    "examples": [
+      "$4,8,12$ 的平均是 $8$。",
+      "$5$ 个数平均 $10$，已知一个是 $6$，其余和 $44$。"
+    ],
+    "commonMistakes": [
+      "总和除错了个数。",
+      "加权平均却当成个数相同。"
+    ]
+  },
+  "page_num": {
+    "nodeId": "page_num",
+    "definition": "页码计数要按位数分段：一位数 $1$–$9$，两位数 $10$–$99$，三位数 $100$–$999$，每段页数乘位数。",
+    "theorems": [
+      "$1$–$9$ 用 $9$ 个数字；$10$–$99$ 用 $90\\times 2=180$ 个。",
+      "编到 $n$ 页，把完整段加起来，再加上最后一段的不足部分。"
+    ],
+    "examples": [
+      "编到第 $11$ 页：前 $9$ 页用 $9$ 个，第 $10$、$11$ 页各 $2$ 个，共 $13$。",
+      "编到第 $100$ 页：$9+180+3=192$。"
+    ],
+    "commonMistakes": [
+      "把页码 $10$ 当成一个数字。",
+      "最后一段按整百去乘。"
+    ]
+  },
+  "complex_frac": {
+    "nodeId": "complex_frac",
+    "definition": "繁分数的分子或分母本身是分数。化简时「除以分数等于乘倒数」。",
+    "theorems": [
+      "$\\dfrac{a/b}{c/d}=\\dfrac{ad}{bc}$。",
+      "先把主分数线看成除号，再约分。"
+    ],
+    "examples": [
+      "$\\dfrac{1/2}{1/3}=\\dfrac{3}{2}$。",
+      "$\\dfrac{2/3}{4/9}=\\dfrac{3}{2}$。"
+    ],
+    "commonMistakes": [
+      "分子分母直接交叉乘反了。",
+      "主分数线看错，先算了上面或下面的一部分。"
+    ]
+  },
+  "frac_of": {
+    "nodeId": "frac_of",
+    "definition": "求 $T$ 的 $a/b$，就是 $T\\times a/b$。反过来，若一个数的 $a/b$ 是 $p$，则这个数是 $p\\times b/a$。",
+    "theorems": [
+      "先求一份 $T/b$，再取 $a$ 份。",
+      "单位「1」要先对准：是谁的几分之几。"
+    ],
+    "examples": [
+      "$24$ 的 $3/4$ 是 $18$。",
+      "$2/5$ 是 $10$，这个数是 $25$。"
+    ],
+    "commonMistakes": [
+      "求「占几分之几」却做成减法。",
+      "份数乘除颠倒。"
+    ]
+  },
+  "gauss_sum": {
+    "nodeId": "gauss_sum",
+    "definition": "$1+2+\\cdots+n=n(n+1)/2$。从 $a$ 加到 $b$ 等于前 $b$ 项和减去前 $a-1$ 项和。",
+    "theorems": [
+      "首尾配对：$1$ 与 $n$、$2$ 与 $n-1$，每对和 $n+1$，共 $n/2$ 对。",
+      "项数是 $b-a+1$。"
+    ],
+    "examples": [
+      "$1+\\cdots+100=5050$。",
+      "$5+\\cdots+12=68$。"
+    ],
+    "commonMistakes": [
+      "公式用成 $n^2/2$。",
+      "从 $a$ 加到 $b$ 却忘了减前 $a-1$ 项。"
+    ]
+  },
+  "est_round": {
+    "nodeId": "est_round",
+    "definition": "估算先把数改成接近的整十、整百，再按精确算法算。四舍五入：看下一位是否满 $5$。",
+    "theorems": [
+      "整百：看十位；$50$ 及以上进一。",
+      "乘估算：两因数分别估，再乘。"
+    ],
+    "examples": [
+      "$398+512$ 估成 $400+500=900$。",
+      "$21\\times 19$ 估成 $20\\times 20=400$。"
+    ],
+    "commonMistakes": [
+      "一个估、一个不估。",
+      "把估算结果当成精确值去交卷。"
+    ]
+  },
+  "pow_value": {
+    "nodeId": "pow_value",
+    "definition": "$a^n$ 表示 $n$ 个 $a$ 相乘。$a^1=a$，$a^2=a\\times a$。指数只表示个数，不是再乘一次指数。",
+    "theorems": [
+      "$a^m\\times a^n=a^{m+n}$。",
+      "$(ab)^n=a^n b^n$。"
+    ],
+    "examples": [
+      "$2^5=32$，$3^4=81$。",
+      "$4$ 个 $3$ 相乘是 $81$。"
+    ],
+    "commonMistakes": [
+      "$a^n$ 做成 $a\\times n$。",
+      "$2^5$ 算成 $10$。"
+    ]
+  },
+  "odd_square_sum": {
+    "nodeId": "odd_square_sum",
+    "definition": "前 $n$ 个正奇数之和等于 $n^2$：$1+3+\\cdots+(2n-1)=n^2$。",
+    "theorems": [
+      "第 $n$ 个奇数是 $2n-1$。",
+      "正方形点阵每层多一圈奇数个点。"
+    ],
+    "examples": [
+      "$1+3+5+7=16=4^2$。",
+      "和为 $36$ 时最后一项是 $11$。"
+    ],
+    "commonMistakes": [
+      "把偶数也加进去。",
+      "项数按最后一个数而不是按奇数序号来数。"
+    ]
+  },
+  "dec_arith": {
+    "nodeId": "dec_arith",
+    "definition": "小数计算先对齐数位，或化成整数（角、分）再算，最后还原单位。",
+    "theorems": [
+      "1 元 $=10$ 角 $=100$ 分。",
+      "$2.5\\times n=\\frac{5}{2}n$。"
+    ],
+    "examples": [
+      "$3.5$ 元 $+2.8$ 元 $=63$ 角。",
+      "$2.5\\times 8=20$。"
+    ],
+    "commonMistakes": [
+      "小数点不对齐。",
+      "乘完忘记除以 $10$。"
+    ]
+  },
+  "sq_diff": {
+    "nodeId": "sq_diff",
+    "definition": "$(a+b)(a-b)=a^2-b^2$。靠近整十、整百的乘法优先用平方差。",
+    "theorems": [
+      "$103\\times 97=100^2-3^2=9991$。"
+    ],
+    "examples": [
+      "$12\\times 8=10^2-2^2=96$。"
+    ],
+    "commonMistakes": [
+      "写成 $a^2+b^2$。",
+      "中间数找错。"
+    ]
+  },
+  "complete_sq": {
+    "nodeId": "complete_sq",
+    "definition": "$(a+b)^2=a^2+2ab+b^2$，$(a-b)^2=a^2-2ab+b^2$。",
+    "theorems": [
+      "展开后三项，中间项是两倍积。"
+    ],
+    "examples": [
+      "$(10+3)^2=169$。",
+      "$98^2=(100-2)^2=9604$。"
+    ],
+    "commonMistakes": [
+      "漏掉 $2ab$。",
+      "$(a-b)^2$ 的中间项写成加。"
+    ]
+  },
+  "weighted_avg": {
+    "nodeId": "weighted_avg",
+    "definition": "加权平均 $=\\dfrac{\\sum x_i w_i}{\\sum w_i}$。权是出现次数或重要程度。",
+    "theorems": [
+      "权全相等时退化为普通平均。"
+    ],
+    "examples": [
+      "$80,90,70$ 权 $2,2,1$，加权平均 $82$。"
+    ],
+    "commonMistakes": [
+      "只加成绩不乘权。",
+      "分母用个数而不是权之和。"
+    ]
+  },
+  "period_sum": {
+    "nodeId": "period_sum",
+    "definition": "周期数列先求和一个循环节，再乘完整段数，最后加剩余项。",
+    "theorems": [
+      "第 $n$ 项是循环节里第 $((n-1)\\bmod T)+1$ 项。"
+    ],
+    "examples": [
+      "$2,5,2,5,\\ldots$ 前 $5$ 项和 $16$。"
+    ],
+    "commonMistakes": [
+      "余项漏加或加错位置。",
+      "项号从 $0$ 数起却没减 $1$。"
+    ]
+  },
+  "square_sum": {
+    "nodeId": "square_sum",
+    "definition": "$1^2+2^2+\\cdots+n^2=\\dfrac{n(n+1)(2n+1)}{6}$。",
+    "theorems": [
+      "从 $a$ 到 $b$ 的平方和是 $S_b-S_{a-1}$。"
+    ],
+    "examples": [
+      "$1^2+\\cdots+5^2=55$。"
+    ],
+    "commonMistakes": [
+      "和奇数求和公式 $n^2$ 搞混。",
+      "分段时没减 $S_{a-1}$。"
+    ]
+  },
+  "scale_unit": {
+    "nodeId": "scale_unit",
+    "definition": "1 千米 $=1000$ 米，1 小时 $=60$ 分。先统一单位再运算。",
+    "theorems": ["小时化分：乘 60 再加余下的分。"],
+    "examples": ["$3$ 千米 $=3000$ 米。", "$2$ 小时 $15$ 分 $=135$ 分。"],
+    "commonMistakes": ["按 $100$ 换算小时。", "千米化米只乘 $100$。"]
+  },
+  "unit_frac": {
+    "nodeId": "unit_frac",
+    "definition": "$1/n=1/(n+1)+1/(n(n+1))$。单位分数拆分是裂项的应用。",
+    "theorems": ["相邻单位分数差等于更小的单位分数。"],
+    "examples": ["$1/5=1/6+1/30$。"],
+    "commonMistakes": ["第二个分母写成 $n+1$。"]
+  },
+  "grid_fill": {
+    "nodeId": "grid_fill",
+    "definition": "数表用行和、列和反推空格：空格 $=$ 已知和 $-$ 已知格。",
+    "theorems": ["2×2 中，对角之和可以互相校验。"],
+    "examples": ["行和 $20$，已知 $7,5$，空格 $8$。"],
+    "commonMistakes": ["行和列和用反了。"]
+  },
+  "magic_sq": {
+    "nodeId": "magic_sq",
+    "definition": "$n$ 阶幻方用 $1$ 到 $n^2$ 各一次，每行每列对角线和都是 $n(n^2+1)/2$。三阶幻和 $15$。",
+    "theorems": ["三阶幻方中心必是 $5$。"],
+    "examples": ["三阶标准形中心 $5$，一角 $2$。"],
+    "commonMistakes": ["幻和当成 $n^2$。", "重复使用同一个数。"]
+  },
+  "digit_swap": {
+    "nodeId": "digit_swap",
+    "definition": "两位数 $10a+b$ 与 $10b+a$，和为 $11(a+b)$，差的绝对值为 $9|a-b|$。",
+    "theorems": ["差一定是 $9$ 的倍数。"],
+    "examples": ["$72$ 与 $27$ 差 $45$，和 $99$。"],
+    "commonMistakes": ["对调后当成三位数。"]
+  },
+  "avg_speed": {
+    "nodeId": "avg_speed",
+    "definition": "等距往返的平均速度是调和平均 $2ab/(a+b)$，不是 $(a+b)/2$。",
+    "theorems": ["两速相同则均速等于该速。"],
+    "examples": ["去 $3$ 回 $6$，均速 $4$。"],
+    "commonMistakes": ["做成算术平均。"]
+  },
+  "move_point": {
+    "nodeId": "move_point",
+    "definition": "小数点向右移 $k$ 位等于乘 $10^k$，向左移 $k$ 位等于除以 $10^k$。",
+    "theorems": ["$n$ 除以 $100$ 就是百分之 $n$。"],
+    "examples": ["$3.5$ 小数点右移 $2$ 位得 $350$。"],
+    "commonMistakes": ["移位时漏补 $0$。"]
+  },
+  "cross_sum": {
+    "nodeId": "cross_sum",
+    "definition": "十字数阵由中心和上下左右四臂组成。五数之和 $=$ 中心 $+$ 四臂。",
+    "theorems": ["缺一臂就用总和减去其余。"],
+    "examples": ["中心 $5$，四臂 $2,3,4,6$，五数和 $20$。"],
+    "commonMistakes": ["把中心算进一臂。"]
+  },
+  "sci_shift": {
+    "nodeId": "sci_shift",
+    "definition": "$a\\times 10^n$ 就是在 $a$ 后面添 $n$ 个 $0$（$a$ 为整数时）。",
+    "theorems": ["除以 $10^n$ 则去掉末尾 $n$ 个 $0$。"],
+    "examples": ["$3\\times 10^4=30000$。"],
+    "commonMistakes": ["把指数当成再乘一次 $n$。"]
+  },
+  "cube_sum": {
+    "nodeId": "cube_sum",
+    "definition": "$1^3+2^3+\\cdots+n^3=(1+2+\\cdots+n)^2=\\left(\\dfrac{n(n+1)}{2}\\right)^2$。",
+    "theorems": ["立方和等于前 $n$ 项和的平方。"],
+    "examples": ["$1^3+\\cdots+5^3=15^2=225$。"],
+    "commonMistakes": ["当成平方和公式。"]
+  }
+}

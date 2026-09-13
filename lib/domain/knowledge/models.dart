@@ -30,7 +30,8 @@ enum KnowledgeLevel {
   }
 }
 
-enum NodeStatus { locked, learning, mastered }
+/// Every node is open; the tree shows how far the learner got, not a gate.
+enum NodeStatus { learning, mastered }
 
 class KnowledgeNode {
   const KnowledgeNode({
@@ -111,15 +112,28 @@ class KnowledgeGraph {
 
   KnowledgeNode nodeById(String id) => nodes.firstWhere((n) => n.id == id);
 
+  /// The node, or null when this tree does not carry it — a card reached from
+  /// another subject's wrong book asks about a node this graph never had.
+  KnowledgeNode? nodeOrNull(String id) {
+    for (final node in nodes) {
+      if (node.id == id) return node;
+    }
+    return null;
+  }
+
   List<KnowledgeNode> dependentsOf(String id) =>
       nodes.where((n) => n.prerequisites.contains(id)).toList();
 
   List<KnowledgeNode> byLevel(KnowledgeLevel level) =>
       nodes.where((n) => n.level == level).toList();
 
+  String levelLabel(KnowledgeLevel level) => area.levelLabel(level.index);
+
   factory KnowledgeGraph.fromJson(Map<String, dynamic> json) {
     return KnowledgeGraph(
-      area: KnowledgeArea.byId(json['areaId'] as String? ?? KnowledgeArea.numberTheoryId),
+      area: KnowledgeArea.byId(
+        json['areaId'] as String? ?? KnowledgeArea.numberTheoryId,
+      ),
       rootId: json['rootId'] as String,
       nodes: (json['nodes'] as List<dynamic>)
           .map((e) => KnowledgeNode.fromJson(e as Map<String, dynamic>))

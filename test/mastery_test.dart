@@ -1,56 +1,48 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matholym/domain/knowledge/graph.dart';
+import 'package:matholym/domain/knowledge/models.dart';
 import 'package:matholym/domain/mastery.dart';
 import 'package:matholym/domain/wrong_book.dart';
 
 void main() {
-  test('only root unlocked until prereqs mastered', () {
-    final unlocked = MasteryRules.unlockedIds(
-      graph: knowledgeGraph,
-      masteredIds: {},
+  test('a node is being learnt until it is mastered', () {
+    expect(
+      MasteryRules.status(nodeId: 'gcd', masteredIds: {}),
+      NodeStatus.learning,
     );
-    expect(unlocked, {kRootNodeId});
-    expect(unlocked.contains('division_algorithm'), isFalse);
-    expect(unlocked.contains('primes_composites'), isFalse);
+    expect(
+      MasteryRules.status(nodeId: kRootNodeId, masteredIds: {kRootNodeId}),
+      NodeStatus.mastered,
+    );
   });
 
-  test('mastering root unlocks its direct dependents', () {
-    final unlocked = MasteryRules.unlockedIds(
+  test('the tree recommends the first node still being learnt', () {
+    final view = GraphView(
       graph: knowledgeGraph,
-      masteredIds: {kRootNodeId},
+      mastered: {kRootNodeId},
+      progress: const {},
     );
-    expect(unlocked.contains('division_algorithm'), isTrue);
-    expect(unlocked.contains('primes_composites'), isTrue);
-    expect(unlocked.contains('gcd'), isFalse);
-  });
-
-  test('gcd unlocks only after both prereqs mastered', () {
-    final incomplete = MasteryRules.unlockedIds(
+    expect(view.recommended()?.id, knowledgeGraph.nodes[1].id);
+    final done = GraphView(
       graph: knowledgeGraph,
-      masteredIds: {kRootNodeId, 'division_algorithm'},
+      mastered: {for (final node in knowledgeGraph.nodes) node.id},
+      progress: const {},
     );
-    expect(incomplete.contains('gcd'), isFalse);
-
-    final ready = MasteryRules.unlockedIds(
-      graph: knowledgeGraph,
-      masteredIds: {
-        kRootNodeId,
-        'division_algorithm',
-        'primes_composites',
-      },
-    );
-    expect(ready.contains('gcd'), isTrue);
+    expect(done.recommended()?.id, kRootNodeId, reason: 'nothing left to learn');
   });
 
   test('challenge pass threshold is 80% of 5', () {
     expect(MasteryRules.challengePassed(correct: 4, total: 5), isTrue);
     expect(MasteryRules.challengePassed(correct: 3, total: 5), isFalse);
     expect(MasteryRules.challengePassed(correct: 4, total: 4), isFalse);
-  });
-
-  test('recent accuracy uses last 20', () {
-    final results = List<bool>.filled(25, false)..setAll(15, List.filled(10, true));
-    expect(MasteryRules.recentAccuracy(results), 0.5);
+    expect(MasteryRules.passCount, 4);
+    expect(
+      MasteryRules.challengePassed(
+        correct: MasteryRules.passCount,
+        total: MasteryRules.challengeSize,
+      ),
+      isTrue,
+    );
   });
 
   test('attribution prefers weaker prerequisite for concept errors', () {

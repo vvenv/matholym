@@ -4,9 +4,19 @@ import 'package:flutter/services.dart';
 class AppColors {
   static const bg = Color(0xFF0C0C0B);
   static const surface = Color(0xFF161614);
-  static const line = Color(0xFF2C2B26);
+  static const line = Color(0xFF302F2A);
+
+  /// Hover and focus edge for framed controls.
+  static const lineStrong = Color(0xFF4C4A43);
   static const text = Color(0xFFE8E6DE);
-  static const muted = Color(0xFF7E7B72);
+
+  /// Secondary copy. Kept above 6:1 on [bg] so small labels stay legible.
+  static const muted = Color(0xFF99958B);
+
+  /// Numbering and ticks: present, but a step behind [muted].
+  static const faint = Color(0xFF625F57);
+
+  /// Reserved for the one thing to do next on a screen.
   static const accent = Color(0xFFC9A46C);
   static const ink = Color(0xFF14140F);
   static const locked = Color(0xFF4A4943);
@@ -25,14 +35,17 @@ class AppSpace {
   static const md = 20.0;
   static const lg = 32.0;
   static const xl = 48.0;
-  static const page = 28.0;
+  static const page = 20.0;
+
+  /// Reading column, page padding included. Bar, body, and dock share it.
+  static const column = 520.0;
 }
 
 class AppType {
   static const mark = TextStyle(
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: FontWeight.w500,
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
     height: 1.2,
     color: AppColors.muted,
   );
@@ -95,7 +108,7 @@ class PageColumn extends StatelessWidget {
   const PageColumn({
     super.key,
     required this.children,
-    this.maxWidth = 520,
+    this.maxWidth = AppSpace.column,
     this.padding = const EdgeInsets.fromLTRB(AppSpace.page, AppSpace.md, AppSpace.page, 40),
   });
 
@@ -135,6 +148,14 @@ ThemeData buildAppTheme() {
     scaffoldBackgroundColor: AppColors.bg,
     splashFactory: InkRipple.splashFactory,
     dividerColor: AppColors.line,
+    textTheme: const TextTheme(
+      displayLarge: AppType.display,
+      titleMedium: AppType.title,
+      bodyLarge: AppType.body,
+      bodyMedium: AppType.body,
+      labelLarge: AppType.meta,
+      labelSmall: AppType.mark,
+    ),
     appBarTheme: const AppBarTheme(
       backgroundColor: AppColors.bg,
       foregroundColor: AppColors.text,
@@ -185,7 +206,7 @@ ThemeData buildAppTheme() {
         textStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          letterSpacing: 1,
+          letterSpacing: 0,
         ),
       ),
     ),
@@ -198,7 +219,7 @@ ThemeData buildAppTheme() {
         textStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          letterSpacing: 1,
+          letterSpacing: 0,
         ),
       ),
     ),
@@ -206,12 +227,18 @@ ThemeData buildAppTheme() {
       style: TextButton.styleFrom(
         foregroundColor: AppColors.muted,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        shape: const RoundedRectangleBorder(),
         textStyle: const TextStyle(
-          fontSize: 13,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
-          letterSpacing: 0.6,
+          letterSpacing: 0,
         ),
       ),
+    ),
+    tooltipTheme: const TooltipThemeData(
+      waitDuration: Duration(milliseconds: 400),
+      textStyle: TextStyle(fontSize: 12, color: AppColors.text, height: 1.35),
+      decoration: BoxDecoration(color: AppColors.surface2),
     ),
     navigationBarTheme: NavigationBarThemeData(
       backgroundColor: AppColors.bg,
@@ -250,6 +277,15 @@ ThemeData buildAppTheme() {
       collapsedIconColor: AppColors.muted,
       tilePadding: EdgeInsets.zero,
       childrenPadding: EdgeInsets.only(bottom: AppSpace.md),
+    ),
+    popupMenuTheme: const PopupMenuThemeData(
+      color: AppColors.surface2,
+      elevation: 0,
+      menuPadding: EdgeInsets.symmetric(vertical: 4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+        side: BorderSide(color: AppColors.line),
+      ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
       color: AppColors.accent,
